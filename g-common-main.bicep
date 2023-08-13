@@ -5,25 +5,23 @@ AUTHOR/S: Marcin Biszczanik
 VERSION: 0.0.2
 */
 
-// SCOPE
+///// SCOPE
 targetScope = 'subscription'
 
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////
-/// VNET 
-
+///// VNET 
 param virtualNetwork_Location string 
 param virtualNetwork_Mask string 
 param virtualNetwork_PrefixFirstOct string 
 param virtualNetwork_PrefixSecondOct string 
 param virtualNetwork_PrefixThirdOct string
+///// VNET /////
 
-/// VNET ///
-var virtualNetwork_Name = 'G-Common-WEU-VNET-RG'
 
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
-
+var virtualNetwork_Name = 'G-Common-WEU-VNET-RG'
 
 
 ////////////////////////////////// EXISTING RESOURCES //////////////////////////////////

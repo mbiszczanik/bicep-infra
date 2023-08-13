@@ -26,6 +26,7 @@ param virtualNetwork_DNSServers array = []
 @description('List of subnets in the VNET')
 param virtualNetwork_Subnets array = []
 
+//////////////////////////////////  RESOURCES //////////////////////////////////
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-04-01' = {
   name: virtualNetwork_Name
   location: virtualNetwork_Location
@@ -44,6 +45,6 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-04-01' = {
 }
 
 //////////////////////////////////  OUTPUT  //////////////////////////////////
-output virtualNetwork_Name string = virtualNetwork_Name
+output virtualNetwork_Name string = virtualNetwork.name
 output virtualNetwork_Id string = virtualNetwork.id
 output virtualNetwork_ResourceGroupName string = resourceGroup().name
