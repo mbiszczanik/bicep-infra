@@ -15,11 +15,11 @@ param resourceGroup_Location string = deployment().location
 ///// RESOURCEGROUP /////
 
 ///// VNET /////
-param virtualNetwork_Location string 
-param virtualNetwork_Mask string 
-param virtualNetwork_PrefixFirstOct string 
-param virtualNetwork_PrefixSecondOct string 
-param virtualNetwork_PrefixThirdOct string
+param virtualNetwork_Location string = deployment().location
+param virtualNetwork_Mask string = '24'
+param virtualNetwork_PrefixFirstOct string = '172' 
+param virtualNetwork_PrefixSecondOct string = '17'
+param virtualNetwork_PrefixThirdOct string = '1'
 ///// VNET /////
 
 
@@ -44,8 +44,6 @@ module resourceGroup_VNET 'modules/resources/resourceGroup.bicep' = {
     }
   }
 }
-
-
 
 ///// VNET /////
 module virtualNetwork 'modules/network/virtualNetwork.bicep' = {
