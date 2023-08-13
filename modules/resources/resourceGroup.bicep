@@ -9,7 +9,7 @@ targetScope = 'subscription'
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////
 param resourceGroup_Name string
-param resourceGroup_Location string
+param resourceGroup_Location string = deployment().location
 param tags object
 
 //////////////////////////////////  RESOURCES //////////////////////////////////
