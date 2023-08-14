@@ -20,13 +20,24 @@ param virtualNetwork_Mask string = '24'
 param virtualNetwork_PrefixFirstOct string = '172' 
 param virtualNetwork_PrefixSecondOct string = '17'
 param virtualNetwork_PrefixThirdOct string = '1'
+param virtualNetwork_DNSServers array = []
 ///// VNET /////
 
 
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
 var resourceGroup_Name = 'G-Common-WEU-VNET-RG'
+
 var virtualNetwork_Name = 'G-Common-WEU-VNET01'
+var virtualNetwork_Subnets = [
+  {
+    name: 'CoreSubnet'
+    properties:{
+      adressPrefix: '${virtualNetwork_PrefixFirstOct}.${virtualNetwork_PrefixSecondOct}.${virtualNetwork_PrefixThirdOct}.0./${virtualNetwork_Mask}'
+    }
+
+  }
+]
 
 
 ////////////////////////////////// EXISTING RESOURCES //////////////////////////////////
@@ -58,5 +69,7 @@ module virtualNetwork 'modules/network/virtualNetwork.bicep' = {
     virtualNetwork_PrefixFirstOct: virtualNetwork_PrefixFirstOct
     virtualNetwork_PrefixSecondOct: virtualNetwork_PrefixSecondOct
     virtualNetwork_PrefixThirdOct: virtualNetwork_PrefixThirdOct
+    virtualNetwork_Subnets: virtualNetwork_Subnets
+    virtualNetwork_DNSServers: virtualNetwork_DNSServers
   }
 }
