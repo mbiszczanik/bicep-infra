@@ -31,9 +31,9 @@ var tags = {
   Location: 'North Europe'
 }
 
-var resourceGroup_Name = 'G-Common-WEU-VNET-RG'
+var resourceGroup_Name = 'Core-WEU-VNET-RG'
 
-var virtualNetwork_Name = 'G-Common-WEU-VNET01'
+var virtualNetwork_Name = 'Core-WEU-VNET01'
 var virtualNetwork_Subnets = [
   {
     name: 'CoreSubnet'
