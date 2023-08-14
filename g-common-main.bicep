@@ -26,6 +26,11 @@ param virtualNetwork_DNSServers array = []
 
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
+var tags = {
+  Environment: 'General'
+  Location: 'North Europe'
+}
+
 var resourceGroup_Name = 'G-Common-WEU-VNET-RG'
 
 var virtualNetwork_Name = 'G-Common-WEU-VNET01'
@@ -33,9 +38,8 @@ var virtualNetwork_Subnets = [
   {
     name: 'CoreSubnet'
     properties:{
-      adressPrefix: '${virtualNetwork_PrefixFirstOct}.${virtualNetwork_PrefixSecondOct}.${virtualNetwork_PrefixThirdOct}.0./${virtualNetwork_Mask}'
+      addressPrefix: '172.17.1.0/24' // '${virtualNetwork_PrefixFirstOct}.${virtualNetwork_PrefixSecondOct}.${virtualNetwork_PrefixThirdOct}.0./24'
     }
-
   }
 ]
 
@@ -61,8 +65,7 @@ module virtualNetwork 'modules/network/virtualNetwork.bicep' = {
   scope: resourceGroup(resourceGroup_VNET.name)
   name: virtualNetwork_Name
   params: {
-    tags: {
-    }
+    tags: tags
     virtualNetwork_Location: virtualNetwork_Location
     virtualNetwork_Mask: virtualNetwork_Mask
     virtualNetwork_Name: virtualNetwork_Name
