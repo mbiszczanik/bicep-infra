@@ -1,5 +1,5 @@
-# Bicep infrastructure for self usage
-Playground for Bicep
+# Bicep infrastructure
+Small projects and templates for Bicep
 
 # How to:
 az bicep install && az bicep upgrade
@@ -9,7 +9,7 @@ az bicep install && az bicep upgrade
 az login
 az account list
 az account set --subscription {Subscription ID}
-az deployment sub create --name g-common-main --location northeurope --template-file .\g-common-main.bicep
+az deployment sub create --name g-common-main --location northeurope --template-file .\g-common-main.bicep --verbose
 
 ```
 
