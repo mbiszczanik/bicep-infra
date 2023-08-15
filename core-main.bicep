@@ -10,12 +10,9 @@ targetScope = 'subscription'
 
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////
-///// RESOURCEGROUP /////
-param resourceGroup_Location string = deployment().location
-///// RESOURCEGROUP /////
+param deploymentLocation string = deployment().location
 
 ///// VNET /////
-param virtualNetwork_Location string = deployment().location
 param virtualNetwork_Mask string = '24'
 param virtualNetwork_PrefixFirstOct string = '172' 
 param virtualNetwork_PrefixSecondOct string = '17'
@@ -31,7 +28,8 @@ var tags = {
   Location: 'North Europe'
 }
 
-var resourceGroup_Name = 'Core-WEU-VNET-RG'
+var resourceGroup_VNET_Name = 'Core-WEU-VNET-RG'
+var resourceGroup_AKS_Name = 'Core-WEU-AKS-RG'
 
 var virtualNetwork_Name = 'Core-WEU-VNET01'
 var virtualNetwork_Subnets = [
@@ -43,6 +41,7 @@ var virtualNetwork_Subnets = [
   }
 ]
 
+var aksCluster_Name = 'Core-WEU-AKS01'
 
 ////////////////////////////////// EXISTING RESOURCES //////////////////////////////////
 
@@ -51,10 +50,19 @@ var virtualNetwork_Subnets = [
 ////////////////////////////////// RESOURCES //////////////////////////////////
 ///// RESOURCE GROUP /////
 module resourceGroup_VNET 'modules/resources/resourceGroup.bicep' = {
-  name: resourceGroup_Name
+  name: resourceGroup_VNET_Name
   params: {
-    resourceGroup_Location: resourceGroup_Location
-    resourceGroup_Name: resourceGroup_Name
+    resourceGroup_Location: deploymentLocation
+    resourceGroup_Name: resourceGroup_VNET_Name
+    tags: tags
+  }
+}
+
+module resourceGroup_AKSCluster 'modules/resources/resourceGroup.bicep' = {
+  name: resourceGroup_AKS_Name
+  params: {
+    resourceGroup_Location: deploymentLocation
+    resourceGroup_Name: resourceGroup_AKS_Name
     tags: {
     }
   }
@@ -66,7 +74,7 @@ module virtualNetwork 'modules/network/virtualNetwork.bicep' = {
   name: virtualNetwork_Name
   params: {
     tags: tags
-    virtualNetwork_Location: virtualNetwork_Location
+    virtualNetwork_Location: deploymentLocation
     virtualNetwork_Mask: virtualNetwork_Mask
     virtualNetwork_Name: virtualNetwork_Name
     virtualNetwork_PrefixFirstOct: virtualNetwork_PrefixFirstOct
@@ -74,5 +82,15 @@ module virtualNetwork 'modules/network/virtualNetwork.bicep' = {
     virtualNetwork_PrefixThirdOct: virtualNetwork_PrefixThirdOct
     virtualNetwork_Subnets: virtualNetwork_Subnets
     virtualNetwork_DNSServers: virtualNetwork_DNSServers
+  }
+}
+
+module aksCluster 'modules/microservices/aksCluster.bicep' = {
+  scope: resourceGroup(resourceGroup_AKSCluster.name)
+  name: aksCluster_Name
+  params: {
+    aks_Location: deploymentLocation
+    aks_Name: aksCluster_Name
+    aks_SshPublicKey: 
   }
 }
