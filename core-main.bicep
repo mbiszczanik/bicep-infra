@@ -91,6 +91,6 @@ module aksCluster 'modules/microservices/aksCluster.bicep' = {
   params: {
     aks_Location: deploymentLocation
     aks_Name: aksCluster_Name
-    aks_SshPublicKey: 
+    aks_SshPublicKey: ''
   }
 }
