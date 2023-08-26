@@ -15,11 +15,24 @@ param networkInterface_SubnetId string
 param networkInterface_NetworkSecurityGroupId string
 
 @allowed([
-  'Static'
   'Dynamic'
+  'Static'
+])
+@description('IP address allocation method')
+param networkInterface_PrivateIpAllocationMethod string = 'Static'
+
+@description('Private IP address resource')
+param networkInterface_PrivateIpAddress string
+
+@description('Application Security Group where IP config is attached')
+param networkInterface_ApplicationSecurityGroupId array = []
+
+@allowed([
+  'Elastic'
+  'Standard'
 ])
 @description('Type network interface resource')
-param networtkInterface_Type string = 'Static'
+param networtkInterface_Type string = 'Standard'
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 resource networkInterface 'Microsoft.Network/networkInterfaces@2023-04-01' = {
@@ -31,6 +44,9 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2023-04-01' = {
       {
         name: 'ipconfig1'
         properties: {
+          privateIPAllocationMethod: networkInterface_PrivateIpAllocationMethod
+          privateIPAddress: networkInterface_PrivateIpAddress
+          applicationSecurityGroups: networkInterface_ApplicationSecurityGroupId
           subnet: {
             id: networkInterface_SubnetId
           }

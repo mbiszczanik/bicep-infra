@@ -20,7 +20,7 @@ param virtualNetwork_PrefixThirdOct string = '1'
 param virtualNetwork_DNSServers array = []
 ///// VNET /////
 
-
+param aks_SshPublicKey string
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
 var tags = {
@@ -91,6 +91,6 @@ module aksCluster 'modules/microservices/aksCluster.bicep' = {
   params: {
     aks_Location: deploymentLocation
     aks_Name: aksCluster_Name
-    aks_SshPublicKey: ''
+    aks_SshPublicKey: aks_SshPublicKey
   }
 }
