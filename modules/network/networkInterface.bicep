@@ -61,3 +61,5 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2023-04-01' = {
 }
 
 //////////////////////////////////  OUTPUT  //////////////////////////////////
+output networkInterface_Id string = networkInterface.id
+output networkInterface_Name string = networkInterface.name
