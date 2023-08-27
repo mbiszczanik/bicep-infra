@@ -13,7 +13,7 @@ az account set --subscription {Subscription ID}
 az deployment sub create \
 --mode Complete \
 --confirm-with-what-if \
---result-format FullResourcePayloads
+--result-format FullResourcePayloads \
 --name g-common-main \
 --template-file .\g-common-main.bicep \
 --location northeurope \
@@ -28,8 +28,8 @@ Select-AzSubscription [Subscription ID]
 New-AzSubscriptionDeployment `
 -Mode Complete `
 -Confirm `
--Name "g-common-main" 
--TemplateFile .\g-common-main.bicep
+-Name "g-common-main" `
+-TemplateFile .\g-common-main.bicep `
 -Location "North Europe"
 ```
 
