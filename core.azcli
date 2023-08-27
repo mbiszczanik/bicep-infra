@@ -1,0 +1,7 @@
+az deployment sub create \
+--mode Complete \
+--confirm-with-what-if \
+--result-format FullResourcePayloads \
+--name g-core-main \
+--template-file .\g-core-main.bicep \
+--location northeurope \

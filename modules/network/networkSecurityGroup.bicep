@@ -20,7 +20,9 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-04-0
   properties:{
     securityRules: networkSecurityGroup_Rules
   }
+  
 }
+
 
 //////////////////////////////////  OUTPUT  //////////////////////////////////
 output networkSecurityGroup_Id string = networkSecurityGroup.id

@@ -14,9 +14,13 @@ az deployment sub create \
 --mode Complete \
 --confirm-with-what-if \
 --result-format FullResourcePayloads \
---name g-common-main \
---template-file .\g-common-main.bicep \
+--name core-main \
+--template-file .\core-main.bicep \
 --location northeurope \
+--verbose
+
+az deployment sub create --mode Complete --confirm-with-what-if --result-format FullResourcePayloads --name g-core-main --location northeurope 
+
 ```
 
 ## PowerShell
@@ -26,12 +30,14 @@ Get-AzSubscription
 Select-AzSubscription [Subscription ID]
 
 New-AzSubscriptionDeployment `
--Mode Complete `
 -Confirm `
 -WhatIfResultFormat FullResourcePayloads `
--Name "g-common-main" `
--TemplateFile .\g-common-main.bicep `
--Location "North Europe"
+-Name "core-main" `
+-TemplateFile .\core-main.bicep `
+-Location "North Europe" `
+-Verbose
+
+-Mode Complete `
 ```
 
 # To be added:

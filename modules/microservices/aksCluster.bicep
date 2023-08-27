@@ -8,10 +8,10 @@ VERSION: 1.0
 //////////////////////////////////  PARAMETERS //////////////////////////////////
 param aks_Name string
 param aks_Location string
-param aks_Version string = '1.19.7'
+param aks_Version string 
 param aks_DiskSize int = 0
 param aks_AgentCount int = 3
-param aks_VMSize string = 'Standard_B2s'
+param aks_VMSize string
 param aks_AdminUsername string = 'adminroot'
 param aks_SshPublicKey string
 
