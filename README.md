@@ -42,7 +42,7 @@ az deployment sub create \
 ```
 
 # To be added:
-- AKS
+- ~~AKS~~
 - VM
 - Bastion
 - CI/CD
