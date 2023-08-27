@@ -4,13 +4,19 @@ Small projects and templates for Bicep
 # How to:
 az bicep install && az bicep upgrade
 
-## Bash
+## Az CLI
 ```
 az login
 az account list
 az account set --subscription {Subscription ID}
-az deployment sub create --name g-common-main --location northeurope --template-file .\g-common-main.bicep --verbose
 
+az deployment sub create \
+--mode Complete \
+--confirm-with-what-if \
+--result-format FullResourcePayloads
+--name g-common-main \
+--template-file .\g-common-main.bicep \
+--location northeurope \
 ```
 
 ## PowerShell
@@ -18,9 +24,13 @@ az deployment sub create --name g-common-main --location northeurope --template-
 Connect-AzAccount
 Get-AzSubscription
 Select-AzSubscription [Subscription ID]
-New-AzSubscriptionDeployment -Name "g-common-main" -Location "North Europe" -TemplateFile .\g-common-main.bicep -Verbose
 
--TemplateParameterFile .\.parameters\g-common-main.json
+New-AzSubscriptionDeployment `
+-Mode Complete `
+-Confirm `
+-Name "g-common-main" 
+-TemplateFile .\g-common-main.bicep
+-Location "North Europe"
 ```
 
 # To be added:
