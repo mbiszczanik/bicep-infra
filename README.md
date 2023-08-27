@@ -10,10 +10,7 @@ Connect-AzAccount
 Get-AzSubscription
 Select-AzSubscription [Subscription ID]
 
-# Current way deployment
-New-AzSubscriptionDeployment -Name "Core-main" -Location "North Europe" -TemplateFile .\core-main.bicep -Verbose
-
-# Working on what-if condition
+# Deployment with what-if condition
 New-AzSubscriptionDeployment `
 -Confirm `
 -WhatIfResultFormat FullResourcePayloads `
@@ -34,7 +31,6 @@ az account set --subscription {Subscription ID}
 
 # Working on what-if deployment
 az deployment sub create \
---mode Complete \
 --confirm-with-what-if \
 --result-format FullResourcePayloads \
 --name core-main \
@@ -42,6 +38,7 @@ az deployment sub create \
 --location northeurope \
 --verbose
 
+--mode Complete \
 ```
 
 # To be added:
