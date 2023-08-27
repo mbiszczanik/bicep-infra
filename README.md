@@ -28,6 +28,7 @@ Select-AzSubscription [Subscription ID]
 New-AzSubscriptionDeployment `
 -Mode Complete `
 -Confirm `
+-WhatIfResultFormat FullResourcePayloads `
 -Name "g-common-main" `
 -TemplateFile .\g-common-main.bicep `
 -Location "North Europe"
