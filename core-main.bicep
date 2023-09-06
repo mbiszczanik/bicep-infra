@@ -20,10 +20,10 @@ param virtualNetwork_PrefixThirdOct string = '1'
 param virtualNetwork_DNSServers array = []
 ///// VNET /////
 
-@secure()
-param aksCluster_SshPublicKey string
-param aksCluster_Version string = '1.27.3'
-param aksCluster_VMSize string = 'Standard_B2s'
+// @secure()
+// param aksCluster_SshPublicKey string
+// param aksCluster_Version string = '1.27.3'
+// param aksCluster_VMSize string = 'Standard_B2s'
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
 var tags = {
@@ -44,7 +44,7 @@ var virtualNetwork_Subnets = [
   }
 ]
 
-var aksCluster_Name = 'Core-WEU-AKS01'
+// var aksCluster_Name = 'Core-WEU-AKS01'
 
 ////////////////////////////////// EXISTING RESOURCES //////////////////////////////////
 
