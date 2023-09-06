@@ -27,5 +27,7 @@ jobs:
         deploymentName: ${{ github.run_number }}
         scope: subscription
         region: northeurope
-        # subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         template: ./core-main.bicep
+        parameters:
+          aksCluster_SshPublicKey=${{secrets.AKS_SSH_KEY}}
