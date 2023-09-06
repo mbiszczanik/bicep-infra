@@ -39,7 +39,7 @@ var virtualNetwork_Subnets = [
   {
     name: 'CoreSubnet'
     properties:{
-      addressPrefix: '${virtualNetwork_PrefixFirstOct}.${virtualNetwork_PrefixSecondOct}.${virtualNetwork_PrefixThirdOct}.0./24' // '172.17.1.0/24' //
+      addressPrefix: '${virtualNetwork_PrefixFirstOct}.${virtualNetwork_PrefixSecondOct}.${virtualNetwork_PrefixThirdOct}.0/24' // '172.17.1.0/24' //
     }
   }
 ]
