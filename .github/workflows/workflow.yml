@@ -1,6 +1,12 @@
 name: MyWorkflow
-
 on: [workflow_dispatch]
+
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'deploy/**'
 
 permissions:
   id-token: write
@@ -22,5 +28,6 @@ jobs:
       with:
         deploymentName: ${{ github.run_number }}
         scope: subscription
+        region: northeurope
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         template: ./core-main.bicep
