@@ -1,4 +1,4 @@
-name: MyWorkflow
+name: BicepDeployment
 on: [workflow_dispatch]
 
 # on:
