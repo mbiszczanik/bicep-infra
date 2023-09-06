@@ -88,14 +88,14 @@ module virtualNetwork 'modules/network/virtualNetwork.bicep' = {
   }
 }
 
-module aksCluster 'modules/microservices/aksCluster.bicep' = {
-  scope: resourceGroup(resourceGroup_AKSCluster.name)
-  name: aksCluster_Name
-  params: {
-    aks_Location: deploymentLocation
-    aks_Name: aksCluster_Name
-    aks_SshPublicKey: aksCluster_SshPublicKey
-    aks_Version: aksCluster_Version
-    aks_VMSize: aksCluster_VMSize
-  }
-}
+// module aksCluster 'modules/microservices/aksCluster.bicep' = {
+//   scope: resourceGroup(resourceGroup_AKSCluster.name)
+//   name: aksCluster_Name
+//   params: {
+//     aks_Location: deploymentLocation
+//     aks_Name: aksCluster_Name
+//     aks_SshPublicKey: aksCluster_SshPublicKey
+//     aks_Version: aksCluster_Version
+//     aks_VMSize: aksCluster_VMSize
+//   }
+// }
