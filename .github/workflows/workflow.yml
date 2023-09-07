@@ -33,7 +33,7 @@ jobs:
     - uses: azure/arm-deploy@v1
       name: Preflight validation
       with:
-        deploymentName: Core-Main-Deployment ${{ github.run_number }}
+        deploymentName: Core-Main-Deployment #${{ github.run_number }}
         scope: subscription
         region: northeurope
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
