@@ -34,8 +34,8 @@ jobs:
       name: Preflight validation
       with:
         deploymentName: Core-Main-Deployment #${{ github.run_number }}
-        scope: Subscription
-        region: Northeurope
+        scope: subscription
+        region: northeurope
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         template: ./core-main.bicep
         deploymentMode: Validate
@@ -57,8 +57,8 @@ jobs:
       name: Deployment
       with:
         deploymentName: Core-Main-Deployment #${{ github.run_number }}
-        scope: Subscription
-        region: Northeurope
+        scope: subscription
+        region: northeurope
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         template: ./core-main.bicep
         failonStdErr: false
