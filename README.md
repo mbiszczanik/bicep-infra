@@ -4,7 +4,13 @@ Small projects and templates for Bicep
 # How to:
 az bicep install && az bicep upgrade
 
-## PowerShell
+# Deployment
+## CI/CD
+For CI/CD look at workflows.
+It is still under construction ;)
+
+## Manual Deployment
+### PowerShell
 ```
 Connect-AzAccount
 Get-AzSubscription
@@ -22,8 +28,7 @@ New-AzSubscriptionDeployment `
 # Check -mode flag
 # -Mode Complete `
 ```
-
-## Az CLI
+### Az CLI
 ```
 az login
 az account list
