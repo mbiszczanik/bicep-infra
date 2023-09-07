@@ -1,7 +1,7 @@
 # Bicep infrastructure
 Small projects and templates for Bicep
 
-# How to:
+# How to
 az bicep install && az bicep upgrade
 
 # Deployment
