@@ -2,7 +2,7 @@
 SUMMARY: Metric Alert resource
 DESCRIPTION: 
 AUTHOR/S: Marcin Biszczanik
-VERSION: 1.0
+VERSION: 1.1
 URI: https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/metricalerts?pivots=deployment-language-bicep
 */
 
@@ -62,7 +62,6 @@ param metricAlert_Target_ResourceType string
 @description('The region of the target resource(s) on which the alert is created/updated. Mandatory if the scope contains a subscription, resource group, or more than one resource.')
 param metricAlert_Target_ResourceRegion string
 
-
 ////////////////////////////////// RESOURCES //////////////////////////////////
 resource metricAlertRule 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   name: metricAlert_Name
@@ -71,7 +70,7 @@ resource metricAlertRule 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     description: metricAlert_Description
     criteria: metricAlert_Criteria
     enabled: true
-    evaluationFrequency: metricAlert_EvalFrequency 
+    evaluationFrequency: metricAlert_EvalFrequency
     scopes: metricAlert_Scope
     severity: metricAlert_Severity
     windowSize: metricAlert_WindowsSize
@@ -86,4 +85,3 @@ resource metricAlertRule 'Microsoft.Insights/metricAlerts@2018-03-01' = {
 //////////////////////////////////  OUTPUT  //////////////////////////////////
 output metricAlert_Name string = metricAlertRule.name
 output metricAlert_Id string = metricAlertRule.id
-
