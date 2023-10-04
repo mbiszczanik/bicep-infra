@@ -13,7 +13,7 @@ param tags object
 
 param metricAlert_Description string
 param metricAlert_Criteria object
-param metriAlert_EvalFrequency string
+param metricAlert_EvalFrequency string
 param metricAlert_Scope string[]
 param metricAlert_Severity int
 param metricAlert_WindowsSize string
@@ -30,7 +30,7 @@ resource metricAlertRule 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     description: metricAlert_Description
     criteria: metricAlert_Criteria
     enabled: true
-    evaluationFrequency: metriAlert_EvalFrequency 
+    evaluationFrequency: metricAlert_EvalFrequency 
     scopes: metricAlert_Scope
     severity: metricAlert_Severity
     windowSize: metricAlert_WindowsSize
