@@ -29,14 +29,49 @@ var virtualNetwork_Subnet_CoreServices = [
       adressPrefix: '10.20.0.0/27'
     }
   }
-
+  {
+    name: 'SharedServicesSubnet'
+    properties: {  
+      adressPrefix: '10.20.10.0/24'
+    }
+  }
+  {
+    name: 'DatabaseSubnet'
+    properties: {  
+      adressPrefix: '10.20.0.0/24'
+    }
+  }
+  {
+    name: 'PublicWebServiceSubnet'
+    properties: {  
+      adressPrefix: '10.20.30.0/24'
+    }
+  }
 ]
 
 var virtualNetwork_Subnet_Manufacturing = [
   {
     name: 'ManufacturingSystemSubnet'
     properties: {  
-      adressPrefix: ''
+      adressPrefix: '10.30.10.0/24'
+    }
+  }
+  {
+    name: 'SensorSubnet1'
+    properties: {  
+      adressPrefix: '10.30.20.0/24'
+    }
+  }
+  {
+    name: 'SensorSubnet2'
+    properties: {  
+      adressPrefix: '10.30.21.0/24'
+    }
+  }
+  {
+    name: 'SensorSubnet3'
+    properties: {  
+      adressPrefix: '10.30.22.0/24'
     }
   }
 ]
@@ -45,7 +80,7 @@ var virtualNetwork_Subnet_Research = [
   {
     name: 'ResearchSystemSubnet'
     properties: {  
-      adressPrefix: ''
+      adressPrefix: '10.40.0.0/24'
     }
   }
 ]
