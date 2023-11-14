@@ -8,13 +8,12 @@ VERSION: 0.0.3
 ///// SCOPE
 targetScope = 'subscription'
 
-
 //////////////////////////////////  PARAMETERS //////////////////////////////////
 param deploymentLocation string = deployment().location
 
 ///// VNET /////
 param virtualNetwork_Mask string = '24'
-param virtualNetwork_PrefixFirstOct string = '172' 
+param virtualNetwork_PrefixFirstOct string = '172'
 param virtualNetwork_PrefixSecondOct string = '17'
 param virtualNetwork_PrefixThirdOct string = '1'
 param virtualNetwork_DNSServers array = []
@@ -38,7 +37,7 @@ var virtualNetwork_Name = 'Core-WEU-VNET01'
 var virtualNetwork_Subnets = [
   {
     name: 'CoreSubnet'
-    properties:{
+    properties: {
       addressPrefix: '${virtualNetwork_PrefixFirstOct}.${virtualNetwork_PrefixSecondOct}.${virtualNetwork_PrefixThirdOct}.0/24' // '172.17.1.0/24' //
     }
   }
@@ -47,8 +46,6 @@ var virtualNetwork_Subnets = [
 // var aksCluster_Name = 'Core-WEU-AKS01'
 
 ////////////////////////////////// EXISTING RESOURCES //////////////////////////////////
-
-
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 ///// RESOURCE GROUP /////
@@ -66,8 +63,7 @@ module resourceGroup_AKSCluster 'modules/resources/resourceGroup.bicep' = {
   params: {
     resourceGroup_Location: deploymentLocation
     resourceGroup_Name: resourceGroup_AKS_Name
-    tags: {
-    }
+    tags: {}
   }
 }
 
