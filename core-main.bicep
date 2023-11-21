@@ -49,7 +49,7 @@ var virtualNetwork_Subnets = [
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 ///// RESOURCE GROUP /////
-module resourceGroup_VNET 'modules/resources/resourceGroup.bicep' = {
+module resourceGroup_VNET '.modules/resources/resourceGroup.bicep' = {
   name: resourceGroup_VNET_Name
   params: {
     resourceGroup_Location: deploymentLocation
@@ -58,7 +58,7 @@ module resourceGroup_VNET 'modules/resources/resourceGroup.bicep' = {
   }
 }
 
-module resourceGroup_AKSCluster 'modules/resources/resourceGroup.bicep' = {
+module resourceGroup_AKSCluster '.modules/resources/resourceGroup.bicep' = {
   name: resourceGroup_AKS_Name
   params: {
     resourceGroup_Location: deploymentLocation
@@ -68,7 +68,7 @@ module resourceGroup_AKSCluster 'modules/resources/resourceGroup.bicep' = {
 }
 
 ///// VNET /////
-module virtualNetwork 'modules/network/virtualNetwork.bicep' = {
+module virtualNetwork '.modules/network/virtualNetwork.bicep' = {
   scope: resourceGroup(resourceGroup_VNET.name)
   name: virtualNetwork_Name
   params: {

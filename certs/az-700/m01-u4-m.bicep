@@ -115,7 +115,7 @@ var virtualNetwork_Subnet_Research = [
 ]
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
-module resourceGroup_VNET '../../modules/resources/resourceGroup.bicep' = {
+module resourceGroup_VNET '../../.modules/resources/resourceGroup.bicep' = {
   name: resourceGroup_VNET_Name
   params: {
     resourceGroup_Name: resourceGroup_VNET_Name
@@ -124,7 +124,7 @@ module resourceGroup_VNET '../../modules/resources/resourceGroup.bicep' = {
   }
 }
 
-module virtualNetwork_CoreServicesVnet '../../modules/network/virtualNetwork.bicep' = {
+module virtualNetwork_CoreServicesVnet '../../.modules/network/virtualNetwork.bicep' = {
   scope: resourceGroup(resourceGroup_VNET.name)
   name: virtualNetwork_CoreServicesVnet_Name
   params: {
@@ -142,7 +142,7 @@ module virtualNetwork_CoreServicesVnet '../../modules/network/virtualNetwork.bic
   ]
 }
 
-module virtualNetwork_ManufacturingVnet '../../modules/network/virtualNetwork.bicep' = {
+module virtualNetwork_ManufacturingVnet '../../.modules/network/virtualNetwork.bicep' = {
   scope: resourceGroup(resourceGroup_VNET.name)
   name: virtualNetwork_ManufacturingVnet_Name
   params: {
@@ -160,7 +160,7 @@ module virtualNetwork_ManufacturingVnet '../../modules/network/virtualNetwork.bi
   ]
 }
 
-module virtualNetwork_ResearchVnet '../../modules/network/virtualNetwork.bicep' = {
+module virtualNetwork_ResearchVnet '../../.modules/network/virtualNetwork.bicep' = {
   scope: resourceGroup(resourceGroup_VNET.name)
   name: virtualNetwork_ResearchVnet_Name
   params: {
