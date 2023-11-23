@@ -2,26 +2,28 @@
 SUMMARY: Az-700 hands-on labs
 DESCRIPTION: M01 - Unit 6 Configure DNS settings in Azure
 AUTHOR/S: Marcin Biszczanik
-VERSION:
+VERSION: 1.0.0
 URI: 
 */
+
+// New-AzResourceGroupDeployment -TemplateFile .\m01-u6.bicep -Location 'eastus' -Name "Az-700" -Verbose
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////
 
 param location string = resourceGroup().location
 
 param virtualMachine_1_Name string = 'TestVM1'
-param virtualMachine_2_Name string = 'TestVM2'
+// param virtualMachine_2_Name string = 'TestVM2'
 param virtualMachine_AdminUsername string = 'administrrator'
 @secure()
 param virtualMachine_AdminPassword string
 
 param networkInterface_1_Name string = '${virtualMachine_1_Name}-NIC'
-param networkInterface_2_Name string = '${virtualMachine_2_Name}-NIC'
+// param networkInterface_2_Name string = '${virtualMachine_2_Name}-NIC'
 param networkSecurityGroup_1_Name string = '${virtualMachine_1_Name}-NSG'
-param networkSecurityGroup_2_Name string = '${virtualMachine_2_Name}-NSG'
+// param networkSecurityGroup_2_Name string = '${virtualMachine_2_Name}-NSG'
 param publicIPAdress_1_Name string = '${virtualMachine_1_Name}-PIP'
-param publicIPAdress_2_Name string = '${virtualMachine_2_Name}-PIP'
+// param publicIPAdress_2_Name string = '${virtualMachine_2_Name}-PIP'
 
 param privateDNSZone_Name string = 'contoso.com'
 param virtualNetworkLink_Name string = 'CoreServicesVnetLink'
@@ -33,12 +35,11 @@ var tags = {
   Environment: 'Training'
 }
 
+var virtualNetwork_CoreServicesVnet_Name = 'CoreServicesVnet'
 var virtualNetwork_Subnet_Name = 'DatabaseSubnet'
 
 var virtualNetworkLink_vnetId = resourceId('MicrosoftNetwork/virtualNetworks', virtualNetwork_CoreServicesVnet_Name)
 var virtualNetworkLink_SubnetRef = resourceId('MicrosoftNetwork/virtualNetworks', virtualNetwork_CoreServicesVnet_Name, virtualNetwork_Subnet_Name)
-
-var virtualNetwork_CoreServicesVnet_Name = 'CoreServicesVnet'
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 
@@ -135,7 +136,7 @@ resource networkSecurityGroup_1 'Microsoft.Network/networkSecurityGroups@2023-05
         }
       }
     ]
-  } 
+  }
 }
 
 resource publicIPAdress_1 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
@@ -144,7 +145,7 @@ resource publicIPAdress_1 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
     name: 'Basic'
     tier: 'Regional'
   }
-  properties:{
+  properties: {
     publicIPAddressVersion: 'IPv4'
     publicIPAllocationMethod: 'Dynamic'
   }
