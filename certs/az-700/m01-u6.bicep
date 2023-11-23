@@ -3,13 +3,19 @@ SUMMARY: Az-700 hands-on labs
 DESCRIPTION: M01 - Unit 6 Configure DNS settings in Azure
 AUTHOR/S: Marcin Biszczanik
 VERSION: 1.0.0
-URI: https://microsoftlearning.github.io/AZ-700-Designing-and-Implementing-Microsoft-Azure-Networking-Solutions/Instructions/Exercises/M01-Unit%206%20Configure%20DNS%20settings%20in%20Azure.html
+URI: https://learn.microsoft.com/en-us/training/modules/introduction-to-azure-virtual-networks/6-exercise-configure-domain-name-servers-configuration-azure
+     https://microsoftlearning.github.io/AZ-700-Designing-and-Implementing-Microsoft-Azure-Networking-Solutions/Instructions/Exercises/M01-Unit%206%20Configure%20DNS%20settings%20in%20Azure.html
 
 Task 1: Create a private DNS Zone
 Task 2: Link subnet for auto registration
 Task 3: Create Virtual Machines to test the configuration
 
-New-AzResourceGroupDeployment -TemplateFile .\m01-u6.bicep -Location 'eastus' -Name "Az-700" -ResourceGroupName "ContosoResourceGroup" -Verbose
+New-AzResourceGroupDeployment `
+-Name "Az-700" `
+-ResourceGroupName "ContosoResourceGroup" `
+-Location 'eastus' `
+-TemplateFile .\m01-u6.bicep `
+-Verbose
 
 */
 

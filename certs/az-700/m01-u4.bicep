@@ -2,10 +2,16 @@
 SUMMARY: Az-700 hands-on labs
 DESCRIPTION: M01 - Unit 4 Design and implement a Virtual Network in Azure
 AUTHOR/S: Marcin Biszczanik
-VERSION: 1.0
+VERSION: 1.0.0
 URI: https://learn.microsoft.com/en-us/training/modules/introduction-to-azure-virtual-networks/4-exercise-design-implement-virtual-network-azure
+     https://microsoftlearning.github.io/AZ-700-Designing-and-Implementing-Microsoft-Azure-Networking-Solutions/Instructions/Exercises/M01-Unit%204%20Design%20and%20implement%20a%20Virtual%20Network%20in%20Azure.html
 
-New-AzResourceGroupDeployment -TemplateFile .\m01-u4.bicep -Location 'eastus' -Name "Az-700" -Verbose
+
+New-AzResourceGroupDeployment `
+-Name "Az-700" `
+-Location 'eastus' `
+-TemplateFile .\m01-u4.bicep `
+-Verbose
 
 */
 
