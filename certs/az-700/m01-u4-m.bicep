@@ -6,7 +6,7 @@ VERSION: 1.0
 URI: https://learn.microsoft.com/en-us/training/modules/introduction-to-azure-virtual-networks/4-exercise-design-implement-virtual-network-azure
 */
 
-// New-AzSubscriptionDeployment -TemplateFile .\m01-u4.bicep -Location 'eastus' -Name "Az-700" -Verbose
+// New-AzSubscriptionDeployment -TemplateFile .\m01-u4-m.bicep -Location 'eastus' -Name "Az-700" -Verbose
 
 targetScope = 'subscription'
 
