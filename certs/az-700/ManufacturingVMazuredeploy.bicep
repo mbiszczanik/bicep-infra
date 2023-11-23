@@ -15,7 +15,7 @@ param vmName1 string = 'ManufacturingVM'
 param nicName1 string = 'ManufacturingVM-NIC'
 
 @description('Virtual machine size')
-param vmSize string = 'Standard_D2s_v3'
+param vmSize string = 'Standard_B2ms'
 
 @description('Admin username')
 param adminUsername string
@@ -55,6 +55,7 @@ resource vm1 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       }
       osDisk: {
         createOption: 'fromImage'
+        
       }
       dataDisks: []
     }

@@ -77,7 +77,7 @@ resource virtualMachine_TestVM1 'Microsoft.Compute/virtualMachines@2023-07-01' =
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_A2_v2'
+      vmSize: 'Standard_B2ms'
     }
     osProfile: {
       computerName: virtualMachine_1_Name
@@ -174,7 +174,7 @@ resource virtualMachine_TestVM2 'Microsoft.Compute/virtualMachines@2023-07-01' =
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_A2_v2'
+      vmSize: 'Standard_B2ms'
     }
     osProfile: {
       computerName: virtualMachine_2_Name
