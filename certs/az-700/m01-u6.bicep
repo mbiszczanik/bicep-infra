@@ -18,17 +18,17 @@ New-AzResourceGroupDeployment -TemplateFile .\m01-u6.bicep -Location 'eastus' -N
 param location string = resourceGroup().location
 
 param virtualMachine_1_Name string = 'TestVM1'
-// param virtualMachine_2_Name string = 'TestVM2'
+param virtualMachine_2_Name string = 'TestVM2'
 param virtualMachine_AdminUsername string = 'administrrator'
 @secure()
 param virtualMachine_AdminPassword string
 
 param networkInterface_1_Name string = '${virtualMachine_1_Name}-NIC'
-// param networkInterface_2_Name string = '${virtualMachine_2_Name}-NIC'
+param networkInterface_2_Name string = '${virtualMachine_2_Name}-NIC'
 param networkSecurityGroup_1_Name string = '${virtualMachine_1_Name}-NSG'
-// param networkSecurityGroup_2_Name string = '${virtualMachine_2_Name}-NSG'
+param networkSecurityGroup_2_Name string = '${virtualMachine_2_Name}-NSG'
 param publicIPAdress_1_Name string = '${virtualMachine_1_Name}-PIP'
-// param publicIPAdress_2_Name string = '${virtualMachine_2_Name}-PIP'
+param publicIPAdress_2_Name string = '${virtualMachine_2_Name}-PIP'
 
 param privateDNSZone_Name string = 'contoso.com'
 param virtualNetworkLink_Name string = 'CoreServicesVnetLink'
@@ -43,7 +43,7 @@ var tags = {
 var virtualNetwork_CoreServicesVnet_Name = 'CoreServicesVnet'
 var virtualNetwork_Subnet_Name = 'DatabaseSubnet'
 
-var virtualNetworkLink_VnetId = resourceId('MicrosoftNetwork/virtualNetworks', virtualNetwork_CoreServicesVnet_Name)
+var virtualNetworkLink_VnetId = '/subscriptions/033dd423-eb29-4416-90cd-a47c6bebf420/resourceGroups/ContosoResourceGroup/providers/Microsoft.Network/virtualNetworks/CoreServicesVnet' // resourceId('MicrosoftNetwork/virtualNetworks', virtualNetwork_CoreServicesVnet_Name)
 var virtualNetworkLink_SubnetRef = resourceId('MicrosoftNetwork/virtualNetworks/subnets', virtualNetwork_CoreServicesVnet_Name, virtualNetwork_Subnet_Name)
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
@@ -59,7 +59,9 @@ resource virtualNetworkLink 'Microsoft.Network/privateDnsZones/virtualNetworkLin
   location: 'global'
   properties: {
     registrationEnabled: virtualNetworkLink_AutoVmRegistration
-    virtualNetwork: virtualNetworkLink_VnetId
+    virtualNetwork: {
+      id: virtualNetworkLink_VnetId
+    }
   }
   tags: tags
 }
@@ -80,7 +82,7 @@ resource virtualMachine_TestVM1 'Microsoft.Compute/virtualMachines@2023-07-01' =
       imageReference: {
         publisher: 'MicrosoftWindowsServer'
         offer: 'WindowsServer'
-        sku: '2012-R2-Datacenter'
+        sku: '2022-datacenter-azure-edition'
         version: 'latest'
       }
       osDisk: {
@@ -119,6 +121,9 @@ resource networkInterface_1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
         }
       }
     ]
+    networkSecurityGroup: {
+      id: networkSecurityGroup_1.id
+    }
   }
 }
 
@@ -158,98 +163,101 @@ resource publicIPAdress_1 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
   }
 }
 
-// resource virtualMachine_TestVM2 'Microsoft.Compute/virtualMachines@2023-07-01' = {
-//   name: virtualMachine_2_Name
-//   location: location
-//   properties: {
-//     hardwareProfile: {
-//       vmSize: 'Standard_A2_v2'
-//     }
-//     osProfile: {
-//       computerName: virtualMachine_2_Name
-//       adminUsername: virtualMachine_AdminUsername
-//       adminPassword: virtualMachine_AdminPassword
-//     }
-//     storageProfile: {
-//       imageReference: {
-//         publisher: 'MicrosoftWindowsServer'
-//         offer: 'WindowsServer'
-//         sku: '2012-R2-Datacenter'
-//         version: 'latest'
-//       }
-//       osDisk: {
-//         createOption: 'FromImage'
-//       }
-//       dataDisks: []
-//     }
-//     networkProfile: {
-//       networkInterfaces: [
-//         {
-//           properties: {
-//             primary: true
-//           }
-//           id: networkInterface_2.id
-//         }
-//       ]
-//     }
-//   }
-// }
+resource virtualMachine_TestVM2 'Microsoft.Compute/virtualMachines@2023-07-01' = {
+  name: virtualMachine_2_Name
+  location: location
+  properties: {
+    hardwareProfile: {
+      vmSize: 'Standard_A2_v2'
+    }
+    osProfile: {
+      computerName: virtualMachine_2_Name
+      adminUsername: virtualMachine_AdminUsername
+      adminPassword: virtualMachine_AdminPassword
+    }
+    storageProfile: {
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter-azure-edition'
+        version: 'latest'
+      }
+      osDisk: {
+        createOption: 'FromImage'
+      }
+      dataDisks: []
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          properties: {
+            primary: true
+          }
+          id: networkInterface_2.id
+        }
+      ]
+    }
+  }
+}
 
-// resource networkInterface_2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-//   name: networkInterface_2_Name
-//   location: location
-//   properties: {
-//     ipConfigurations: [
-//       {
-//         name: networkInterface_2_Name
-//         properties: {
-//           privateIPAllocationMethod: 'Dynamic'
-//           subnet: {
-//             id: virtualNetworkLink_SubnetRef
-//           }
-//           publicIPAddress: {
-//             id: publicIPAdress_2.id
-//           }
-//         }
-//       }
-//     ]
-//   }
-// }
+resource networkInterface_2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: networkInterface_2_Name
+  location: location
+  properties: {
+    ipConfigurations: [
+      {
+        name: networkInterface_2_Name
+        properties: {
+          privateIPAllocationMethod: 'Dynamic'
+          subnet: {
+            id: virtualNetworkLink_SubnetRef
+          }
+          publicIPAddress: {
+            id: publicIPAdress_2.id
+          }
+        }
+      }
+    ]
+    networkSecurityGroup: {
+      id: networkSecurityGroup_2.id
+    }
+  }
+}
 
-// resource networkSecurityGroup_2 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
-//   name: networkSecurityGroup_2_Name
-//   location: location
-//   properties: {
-//     securityRules: [
-//       {
-//         name: 'allow-rdp'
-//         properties: {
-//           description: 'Allow to RDP connection'
-//           protocol: 'Tcp'
-//           sourcePortRange: '*'
-//           destinationPortRange: '3389'
-//           sourceAddressPrefix: '*'
-//           destinationAddressPrefix: '*'
-//           access: 'Allow'
-//           priority: 1000
-//           direction: 'Inbound'
-//         }
-//       }
-//     ]
-//   } 
-// }
+resource networkSecurityGroup_2 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
+  name: networkSecurityGroup_2_Name
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'allow-rdp'
+        properties: {
+          description: 'Allow to RDP connection'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '3389'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 1000
+          direction: 'Inbound'
+        }
+      }
+    ]
+  }
+}
 
-// resource publicIPAdress_2 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
-//   name: publicIPAdress_2_Name
-//   location: location
-//   sku: {
-//     name: 'Basic'
-//     tier: 'Regional'
-//   }
-//   properties:{
-//     publicIPAddressVersion: 'IPv4'
-//     publicIPAllocationMethod: 'Dynamic'
-//   }
-// }
+resource publicIPAdress_2 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
+  name: publicIPAdress_2_Name
+  location: location
+  sku: {
+    name: 'Basic'
+    tier: 'Regional'
+  }
+  properties: {
+    publicIPAddressVersion: 'IPv4'
+    publicIPAllocationMethod: 'Dynamic'
+  }
+}
 
 //////////////////////////////////  OUTPUT  //////////////////////////////////
