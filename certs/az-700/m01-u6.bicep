@@ -17,6 +17,12 @@ New-AzResourceGroupDeployment `
 -TemplateFile .\m01-u6.bicep `
 -Verbose
 
+Start-AzVM -ResourceGroupName -Name TestVM1 "ContosoResourceGroup"
+Start-AzVM -ResourceGroupName -Name "TestVM2" "ContosoResourceGroup"
+
+Stop-AzVM -ResourceGroupName -Name "TestVM1" "ContosoResourceGroup" 
+Stop-AzVM -ResourceGroupName -Name "TestVM2" "ContosoResourceGroup" 
+
 */
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////
@@ -27,7 +33,7 @@ param virtualMachine_1_Name string = 'TestVM1'
 param virtualMachine_2_Name string = 'TestVM2'
 param virtualMachine_AdminUsername string = 'administrrator'
 @secure()
-param virtualMachine_AdminPassword string
+param virtualMachine_AdminPassword string 
 
 param networkInterface_1_Name string = '${virtualMachine_1_Name}-NIC'
 param networkInterface_2_Name string = '${virtualMachine_2_Name}-NIC'

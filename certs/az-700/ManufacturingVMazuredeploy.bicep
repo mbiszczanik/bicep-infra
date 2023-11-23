@@ -7,6 +7,10 @@ New-AzResourceGroupDeployment `
 -TemplateParameterFile .\.parameters\ManufacturingVMazuredeploy.bicepparam `
 -Verbose
 
+Start-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup"
+
+Stop-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup" 
+
 */
 @description('description')
 param vmName1 string = 'ManufacturingVM'
