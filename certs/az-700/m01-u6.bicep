@@ -3,10 +3,15 @@ SUMMARY: Az-700 hands-on labs
 DESCRIPTION: M01 - Unit 6 Configure DNS settings in Azure
 AUTHOR/S: Marcin Biszczanik
 VERSION: 1.0.0
-URI: 
-*/
+URI:
 
-// New-AzResourceGroupDeployment -TemplateFile .\m01-u6.bicep -Location 'eastus' -Name "Az-700" -Verbose
+Task 1: Create a private DNS Zone
+Task 2: Link subnet for auto registration
+Task 3: Create Virtual Machines to test the configuration
+
+New-AzResourceGroupDeployment -TemplateFile .\m01-u6.bicep -Location 'eastus' -Name "Az-700" -ResourceGroupName "ContosoResourceGroup" -Verbose
+
+*/
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////
 
@@ -38,8 +43,8 @@ var tags = {
 var virtualNetwork_CoreServicesVnet_Name = 'CoreServicesVnet'
 var virtualNetwork_Subnet_Name = 'DatabaseSubnet'
 
-var virtualNetworkLink_vnetId = resourceId('MicrosoftNetwork/virtualNetworks', virtualNetwork_CoreServicesVnet_Name)
-var virtualNetworkLink_SubnetRef = resourceId('MicrosoftNetwork/virtualNetworks', virtualNetwork_CoreServicesVnet_Name, virtualNetwork_Subnet_Name)
+var virtualNetworkLink_VnetId = resourceId('MicrosoftNetwork/virtualNetworks', virtualNetwork_CoreServicesVnet_Name)
+var virtualNetworkLink_SubnetRef = resourceId('MicrosoftNetwork/virtualNetworks/subnets', virtualNetwork_CoreServicesVnet_Name, virtualNetwork_Subnet_Name)
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 
@@ -51,9 +56,10 @@ resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 resource virtualNetworkLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
   parent: privateDnsZone
   name: virtualNetworkLink_Name
+  location: 'global'
   properties: {
     registrationEnabled: virtualNetworkLink_AutoVmRegistration
-    virtualNetwork: virtualNetworkLink_vnetId
+    virtualNetwork: virtualNetworkLink_VnetId
   }
   tags: tags
 }
@@ -141,6 +147,7 @@ resource networkSecurityGroup_1 'Microsoft.Network/networkSecurityGroups@2023-05
 
 resource publicIPAdress_1 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
   name: publicIPAdress_1_Name
+  location: location
   sku: {
     name: 'Basic'
     tier: 'Regional'
@@ -234,6 +241,7 @@ resource publicIPAdress_1 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
 
 // resource publicIPAdress_2 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
 //   name: publicIPAdress_2_Name
+//   location: location
 //   sku: {
 //     name: 'Basic'
 //     tier: 'Regional'
