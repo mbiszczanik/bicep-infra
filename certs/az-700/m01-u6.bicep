@@ -3,7 +3,7 @@ SUMMARY: Az-700 hands-on labs
 DESCRIPTION: M01 - Unit 6 Configure DNS settings in Azure
 AUTHOR/S: Marcin Biszczanik
 VERSION: 1.0.0
-URI:
+URI: https://microsoftlearning.github.io/AZ-700-Designing-and-Implementing-Microsoft-Azure-Networking-Solutions/Instructions/Exercises/M01-Unit%206%20Configure%20DNS%20settings%20in%20Azure.html
 
 Task 1: Create a private DNS Zone
 Task 2: Link subnet for auto registration
