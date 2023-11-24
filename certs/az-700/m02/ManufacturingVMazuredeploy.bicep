@@ -1,8 +1,8 @@
 @description('description')
-param vmName1 string
+param vmName1 string = 'ManufacturingVM'
 
 @description('description')
-param nicName1 string
+param nicName1 string = 'ManufacturingVM-nic'
 
 @description('Virtual machine size')
 param vmSize string = 'Standard_B2ms'
@@ -19,11 +19,9 @@ var nsgName1 = 'ManufacturingVM-nsg'
 var PIPName1 = 'ManufacturingVM-ip'
 var subnetName = 'ManufacturingSystemSubnet'
 var subnetRef = resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
-var computeApiVersion = '2018-06-01'
-var networkApiVersion = '2018-08-01'
 var location = 'West Europe'
 
-resource vm1 'Microsoft.Compute/virtualMachines@[variables(\'computeApiVersion\')]' = {
+resource vm1 'Microsoft.Compute/virtualMachines@2023-07-01' = {
   name: vmName1
   location: location
   properties: {
@@ -32,7 +30,7 @@ resource vm1 'Microsoft.Compute/virtualMachines@[variables(\'computeApiVersion\'
       adminUsername: adminUsername
       adminPassword: adminPassword
       windowsConfiguration: {
-        provisionVmAgent: 'true'
+        provisionVMAgent: true
       }
     }
     hardwareProfile: {
@@ -63,7 +61,7 @@ resource vm1 'Microsoft.Compute/virtualMachines@[variables(\'computeApiVersion\'
   }
 }
 
-resource nic1 'Microsoft.Network/networkInterfaces@[variables(\'networkApiVersion\')]' = {
+resource nic1 'Microsoft.Network/networkInterfaces@2023-05-01' = {
   name: nicName1
   location: location
   properties: {
@@ -87,7 +85,7 @@ resource nic1 'Microsoft.Network/networkInterfaces@[variables(\'networkApiVersio
   }
 }
 
-resource nsg1 'Microsoft.Network/networkSecurityGroups@[variables(\'networkApiVersion\')]' = {
+resource nsg1 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
   name: nsgName1
   location: location
   properties: {
