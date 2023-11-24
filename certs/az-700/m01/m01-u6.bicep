@@ -99,6 +99,9 @@ resource virtualMachine_TestVM1 'Microsoft.Compute/virtualMachines@2023-07-01' =
       }
       osDisk: {
         createOption: 'FromImage'
+        managedDisk: {
+          storageAccountType: 'Standard_LRS'
+        }
       }
       dataDisks: []
     }
@@ -196,6 +199,9 @@ resource virtualMachine_TestVM2 'Microsoft.Compute/virtualMachines@2023-07-01' =
       }
       osDisk: {
         createOption: 'FromImage'
+        managedDisk: {
+          storageAccountType: 'Standard_LRS'
+        }
       }
       dataDisks: []
     }

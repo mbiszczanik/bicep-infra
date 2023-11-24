@@ -60,6 +60,9 @@ resource vm1 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       }
       osDisk: {
         createOption: 'fromImage'
+        managedDisk: {
+          storageAccountType: 'Standard_LRS'
+        }
       }
       dataDisks: []
     }

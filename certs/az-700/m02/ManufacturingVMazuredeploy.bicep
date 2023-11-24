@@ -22,7 +22,7 @@ param nicName1 string = 'ManufacturingVM-nic'
 param vmSize string = 'Standard_B2ms'
 
 @description('Admin username')
-param adminUsername string
+param adminUsername string = 'administrrator'
 
 @description('Admin password')
 @secure()
@@ -59,6 +59,9 @@ resource vm1 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       }
       osDisk: {
         createOption: 'fromImage'
+        managedDisk: {
+          storageAccountType: 'Standard_LRS'
+        }
       }
       dataDisks: []
     }
