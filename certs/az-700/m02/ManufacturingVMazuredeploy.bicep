@@ -1,3 +1,17 @@
+/* 
+
+New-AzResourceGroupDeployment `
+-Name "Az-700" `
+-ResourceGroupName "ContosoResourceGroup" `
+-TemplateFile .\ManufacturingVMazuredeploy.bicep `
+-Verbose
+
+Start-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup"
+
+Stop-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup" 
+
+*/
+
 @description('description')
 param vmName1 string = 'ManufacturingVM'
 
