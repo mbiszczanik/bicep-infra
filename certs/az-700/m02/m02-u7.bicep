@@ -59,7 +59,7 @@ resource virtualNetwork_ResearchVnet 'Microsoft.Network/virtualNetworks@2023-05-
   }
 }
 
-resource ContosoVirtualWAN 'Microsoft.Network/virtualWans@2023-05-01' = {
+resource virtualWAN_Contoso 'Microsoft.Network/virtualWans@2023-05-01' = {
   name: virtualWan_name
   location: 'global'
   properties: {
@@ -70,13 +70,13 @@ resource ContosoVirtualWAN 'Microsoft.Network/virtualWans@2023-05-01' = {
   }
 }
 
-resource ContosoVirtualWANHub_WESTUS 'Microsoft.Network/virtualHubs@2023-05-01' = {
+resource virtualWANHub_Contoso_WESTUS 'Microsoft.Network/virtualHubs@2023-05-01' = {
   name: virtualHub_name
   location: location_westus
   properties: {
     addressPrefix: '10.60.0.0/24'
     virtualWan: {
-      id: ContosoVirtualWAN.id
+      id: virtualWAN_Contoso.id
     }
   }
 }
