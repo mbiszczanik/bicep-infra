@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_myVM1_name": {
+            "value": null
+        },
+        "virtualMachines_myVM2_name": {
+            "value": null
+        },
+        "virtualMachines_myVM3_name": {
+            "value": null
+        },
+        "loadBalancers_myIntLB_name": {
+            "value": null
+        },
+        "bastionHosts_myBastionHost_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic1_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic3_name": {
+            "value": null
+        },
+        "virtualNetworks_IntLB_VNet_name": {
+            "value": null
+        },
+        "networkInterfaces_myMV2nic2_name": {
+            "value": null
+        },
+        "networkSecurityGroups_myNSG_name": {
+            "value": null
+        },
+        "publicIPAddresses_myBastionIP_name": {
+            "value": null
+        }
+    }
+}

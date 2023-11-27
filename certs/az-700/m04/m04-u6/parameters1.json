@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_ContosoWebAppEastUSxa_name": {
+            "value": null
+        },
+        "components_ContosoWebAppEastUSxa_name": {
+            "value": null
+        },
+        "serverfarms_ContosoAppServicePlanEastUS_name": {
+            "value": null
+        },
+        "trafficManagerProfiles_Contoso_TMProfilexa_name": {
+            "value": null
+        },
+        "actionGroups_Application_Insights_Smart_Detection_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___contosowebappeastusxa_name": {
+            "value": null
+        },
+        "workspaces_DefaultWorkspace_033dd423_eb29_4416_90cd_a47c6bebf420_EUS_externalid": {
+            "value": null
+        },
+        "sites_ContosoWebAppWestEuropexa_externalid": {
+            "value": null
+        }
+    }
+}
