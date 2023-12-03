@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "metricAlerts_MyDdosAlert_name": {
+            "value": null
+        },
+        "virtualMachines_MyVirtualMachine_name": {
+            "value": null
+        },
+        "virtualNetworks_MyVirtualNetwork_name": {
+            "value": null
+        },
+        "sshPublicKeys_MyVirtualMachine_key_name": {
+            "value": null
+        },
+        "publicIPAddresses_MyPublicIPAddress_name": {
+            "value": null
+        },
+        "publicIPAddresses_MyVirtualMachine_ip_name": {
+            "value": null
+        },
+        "ddosProtectionPlans_MyDdoSProtectionPlan_name": {
+            "value": null
+        },
+        "networkInterfaces_myvirtualmachine410_z1_name": {
+            "value": null
+        },
+        "networkSecurityGroups_MyVirtualMachine_nsg_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_myvirtualmachine_name": {
+            "value": null
+        }
+    }
+}

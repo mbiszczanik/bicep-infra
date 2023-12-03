@@ -1,0 +1,414 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "metricAlerts_MyDdosAlert_name": {
+            "defaultValue": "MyDdosAlert",
+            "type": "String"
+        },
+        "virtualMachines_MyVirtualMachine_name": {
+            "defaultValue": "MyVirtualMachine",
+            "type": "String"
+        },
+        "virtualNetworks_MyVirtualNetwork_name": {
+            "defaultValue": "MyVirtualNetwork",
+            "type": "String"
+        },
+        "sshPublicKeys_MyVirtualMachine_key_name": {
+            "defaultValue": "MyVirtualMachine_key",
+            "type": "String"
+        },
+        "publicIPAddresses_MyPublicIPAddress_name": {
+            "defaultValue": "MyPublicIPAddress",
+            "type": "String"
+        },
+        "publicIPAddresses_MyVirtualMachine_ip_name": {
+            "defaultValue": "MyVirtualMachine-ip",
+            "type": "String"
+        },
+        "ddosProtectionPlans_MyDdoSProtectionPlan_name": {
+            "defaultValue": "MyDdoSProtectionPlan",
+            "type": "String"
+        },
+        "networkInterfaces_myvirtualmachine410_z1_name": {
+            "defaultValue": "myvirtualmachine410_z1",
+            "type": "String"
+        },
+        "networkSecurityGroups_MyVirtualMachine_nsg_name": {
+            "defaultValue": "MyVirtualMachine-nsg",
+            "type": "String"
+        },
+        "schedules_shutdown_computevm_myvirtualmachine_name": {
+            "defaultValue": "shutdown-computevm-myvirtualmachine",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/sshPublicKeys",
+            "apiVersion": "2023-03-01",
+            "name": "[parameters('sshPublicKeys_MyVirtualMachine_key_name')]",
+            "location": "eastus",
+            "properties": {
+                "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCyiuW1Q/F6xZjbHpeqM99gNSjy6YrWZaV3zryU2z5P/XnOtklvkA/4v29BC2aOjun9OS47QstARcC2UQCnPle7oPKHtZIm0tG0pI7ZS7KZWTEazgxnD+CmyvsyscoGdLV6it5APbbBRz9ZVsc48WryBhEqEyCwEFpark+mVzN+W36BXxoI9Z0vqXAc1NH4y7es3SZftozII7ErRREw5Sp58zImOgAF2JGOmi67HUUJ6J3ADc/U0W/oZ0wVacGgaHapRdJdQ/dldAcBicAbTppgXFlLYDWlvXLex3aj5yJFrhI43TXZpdP4h0L7A7yRWFU7nSm5NvKgPa1RM7vMmqwy6+fxwfTv57HeFoXzhU/oS6MdWVBT5qLMvszr8/6AM8LTVM60CkNyP/TBw75DqnO+0z8YIc2k0r6pF2HE7ctf8a0+ivIo4mrCHG1jT52hNuUceakSHRrcLrc2ZblJmGkUI50hegdAFGEbnnwfAGNlnot/Dbhcu/ZvnhXCb2Cc/4U= generated-by-azure"
+            }
+        },
+        {
+            "type": "Microsoft.Network/ddosProtectionPlans",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('ddosProtectionPlans_MyDdoSProtectionPlan_name')]",
+            "location": "eastus",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('networkSecurityGroups_MyVirtualMachine_nsg_name')]",
+            "location": "eastus",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', parameters('networkSecurityGroups_MyVirtualMachine_nsg_name'), 'SSH')]",
+                        "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 300,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('publicIPAddresses_MyPublicIPAddress_name')]",
+            "location": "eastus",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "zones": [
+                "3",
+                "1",
+                "2"
+            ],
+            "properties": {
+                "ipAddress": "20.121.160.136",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "dnsSettings": {
+                    "domainNameLabel": "mypublicdnsbishtou",
+                    "fqdn": "mypublicdnsbishtou.eastus.cloudapp.azure.com"
+                },
+                "ipTags": [],
+                "ddosSettings": {
+                    "protectionMode": "VirtualNetworkInherited"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('publicIPAddresses_MyVirtualMachine_ip_name')]",
+            "location": "eastus",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "zones": [
+                "1"
+            ],
+            "properties": {
+                "ipAddress": "172.174.231.213",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2023-03-01",
+            "name": "[parameters('virtualMachines_MyVirtualMachine_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_myvirtualmachine410_z1_name'))]"
+            ],
+            "zones": [
+                "1"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1ls"
+                },
+                "additionalCapabilities": {
+                    "hibernationEnabled": false
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts-gen2",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_MyVirtualMachine_name'), '_OsDisk_1_6451f76383464c2e9ff0eb8ee15c95e2')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_MyVirtualMachine_name'), '_OsDisk_1_6451f76383464c2e9ff0eb8ee15c95e2'))]"
+                        },
+                        "deleteOption": "Delete",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": [],
+                    "diskControllerType": "SCSI"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_MyVirtualMachine_name')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": true,
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "/home/azureuser/.ssh/authorized_keys",
+                                    "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCyiuW1Q/F6xZjbHpeqM99gNSjy6YrWZaV3zryU2z5P/XnOtklvkA/4v29BC2aOjun9OS47QstARcC2UQCnPle7oPKHtZIm0tG0pI7ZS7KZWTEazgxnD+CmyvsyscoGdLV6it5APbbBRz9ZVsc48WryBhEqEyCwEFpark+mVzN+W36BXxoI9Z0vqXAc1NH4y7es3SZftozII7ErRREw5Sp58zImOgAF2JGOmi67HUUJ6J3ADc/U0W/oZ0wVacGgaHapRdJdQ/dldAcBicAbTppgXFlLYDWlvXLex3aj5yJFrhI43TXZpdP4h0L7A7yRWFU7nSm5NvKgPa1RM7vMmqwy6+fxwfTv57HeFoXzhU/oS6MdWVBT5qLMvszr8/6AM8LTVM60CkNyP/TBw75DqnO+0z8YIc2k0r6pF2HE7ctf8a0+ivIo4mrCHG1jT52hNuUceakSHRrcLrc2ZblJmGkUI50hegdAFGEbnnwfAGNlnot/Dbhcu/ZvnhXCb2Cc/4U= generated-by-azure"
+                                }
+                            ]
+                        },
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        },
+                        "enableVMAgentPlatformUpdates": false
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "securityProfile": {
+                    "uefiSettings": {
+                        "secureBootEnabled": true,
+                        "vTpmEnabled": true
+                    },
+                    "securityType": "TrustedLaunch"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_myvirtualmachine410_z1_name'))]",
+                            "properties": {
+                                "deleteOption": "Detach"
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        },
+        {
+            "type": "microsoft.devtestlab/schedules",
+            "apiVersion": "2018-09-15",
+            "name": "[parameters('schedules_shutdown_computevm_myvirtualmachine_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_MyVirtualMachine_name'))]"
+            ],
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "1900"
+                },
+                "timeZoneId": "UTC",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": 30,
+                    "notificationLocale": "en"
+                },
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_MyVirtualMachine_name'))]"
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_MyDdosAlert_name')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_MyPublicIPAddress_name'))]"
+            ],
+            "properties": {
+                "severity": 3,
+                "enabled": true,
+                "scopes": [
+                    "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_MyPublicIPAddress_name'))]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT5M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.Network/publicIPAddresses",
+                            "metricName": "IfUnderDDoSAttack",
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Maximum",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.Network/publicIPAddresses",
+                "targetResourceRegion": "eastus",
+                "actions": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('networkSecurityGroups_MyVirtualMachine_nsg_name'), '/SSH')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_MyVirtualMachine_nsg_name'))]"
+            ],
+            "properties": {
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 300,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('virtualNetworks_MyVirtualNetwork_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/ddosProtectionPlans', parameters('ddosProtectionPlans_MyDdoSProtectionPlan_name'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "encryption": {
+                    "enabled": false,
+                    "enforcement": "AllowUnencrypted"
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_MyVirtualNetwork_name'), 'default')]",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "defaultOutboundAccess": true
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": true,
+                "ddosProtectionPlan": {
+                    "id": "[resourceId('Microsoft.Network/ddosProtectionPlans', parameters('ddosProtectionPlans_MyDdoSProtectionPlan_name'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualNetworks_MyVirtualNetwork_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_MyVirtualNetwork_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.0.0.0/24",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled",
+                "defaultOutboundAccess": true
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('networkInterfaces_myvirtualmachine410_z1_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_MyPublicIPAddress_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_MyVirtualNetwork_name'), 'default')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_MyVirtualMachine_nsg_name'))]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_myvirtualmachine410_z1_name')), '/ipConfigurations/ipconfig1')]",
+                        "etag": "W/\"3b618352-75a7-4391-ab0f-f293bdc58b5d\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_MyPublicIPAddress_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_MyVirtualNetwork_name'), 'default')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "disableTcpStateTracking": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_MyVirtualMachine_nsg_name'))]"
+                },
+                "nicType": "Standard",
+                "auxiliaryMode": "None",
+                "auxiliarySku": "None"
+            }
+        }
+    ]
+}
