@@ -1,0 +1,864 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualHubs_Hub_01_name": {
+            "defaultValue": "Hub-01",
+            "type": "String"
+        },
+        "virtualWans_Vwan_01_name": {
+            "defaultValue": "Vwan-01",
+            "type": "String"
+        },
+        "virtualNetworks_Spoke_01_name": {
+            "defaultValue": "Spoke-01",
+            "type": "String"
+        },
+        "virtualNetworks_Spoke_02_name": {
+            "defaultValue": "Spoke-02",
+            "type": "String"
+        },
+        "firewallPolicies_Policy_01_name": {
+            "defaultValue": "Policy-01",
+            "type": "String"
+        },
+        "virtualMachines_Srv_workload_01_name": {
+            "defaultValue": "Srv-workload-01",
+            "type": "String"
+        },
+        "virtualMachines_Srv_workload_02_name": {
+            "defaultValue": "Srv-workload-02",
+            "type": "String"
+        },
+        "azureFirewalls_AzureFirewall_Hub_01_name": {
+            "defaultValue": "AzureFirewall_Hub-01",
+            "type": "String"
+        },
+        "networkInterfaces_Srv_workload_01nic_name": {
+            "defaultValue": "Srv-workload-01nic",
+            "type": "String"
+        },
+        "networkInterfaces_Srv_workload_02nic_name": {
+            "defaultValue": "Srv-workload-02nic",
+            "type": "String"
+        },
+        "virtualNetworks_HV_Hub_01_9e84d667_c492_4c39_b9a9_33b56ea1e7b3_externalid": {
+            "defaultValue": "/subscriptions/4f9dadf2-e21c-45a1-8f5a-d9ba973133c1/resourceGroups/RG_Hub-01_7d629277-4cc7-4655-9cd1-dc0110c9a7a2/providers/Microsoft.Network/virtualNetworks/HV_Hub-01_9e84d667-c492-4c39-b9a9-33b56ea1e7b3",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/firewallPolicies",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('firewallPolicies_Policy_01_name')]",
+            "location": "eastus",
+            "properties": {
+                "sku": {
+                    "tier": "Standard"
+                },
+                "threatIntelMode": "Alert",
+                "threatIntelWhitelist": {
+                    "fqdns": [],
+                    "ipAddresses": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('virtualNetworks_Spoke_01_name')]",
+            "location": "eastus",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "encryption": {
+                    "enabled": false,
+                    "enforcement": "AllowUnencrypted"
+                },
+                "subnets": [
+                    {
+                        "name": "Workload-01-SN",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Spoke_01_name'), 'Workload-01-SN')]",
+                        "properties": {
+                            "addressPrefixes": [
+                                "10.0.1.0/24"
+                            ],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "defaultOutboundAccess": true
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                    {
+                        "name": "RemoteVnetToHubPeering_9e02b0a0-8751-4915-865b-4e6cb8431a8c",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('virtualNetworks_Spoke_01_name'), 'RemoteVnetToHubPeering_9e02b0a0-8751-4915-865b-4e6cb8431a8c')]",
+                        "properties": {
+                            "peeringState": "Connected",
+                            "peeringSyncLevel": "FullyInSync",
+                            "remoteVirtualNetwork": {
+                                "id": "[parameters('virtualNetworks_HV_Hub_01_9e84d667_c492_4c39_b9a9_33b56ea1e7b3_externalid')]"
+                            },
+                            "allowVirtualNetworkAccess": true,
+                            "allowForwardedTraffic": false,
+                            "allowGatewayTransit": false,
+                            "useRemoteGateways": true,
+                            "doNotVerifyRemoteGateways": true,
+                            "remoteAddressSpace": {
+                                "addressPrefixes": [
+                                    "10.2.0.0/16"
+                                ]
+                            },
+                            "remoteVirtualNetworkAddressSpace": {
+                                "addressPrefixes": [
+                                    "10.2.0.0/16"
+                                ]
+                            }
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+                    }
+                ],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('virtualNetworks_Spoke_02_name')]",
+            "location": "eastus",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/16"
+                    ]
+                },
+                "encryption": {
+                    "enabled": false,
+                    "enforcement": "AllowUnencrypted"
+                },
+                "subnets": [
+                    {
+                        "name": "Workload-02-SN",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Spoke_02_name'), 'Workload-02-SN')]",
+                        "properties": {
+                            "addressPrefixes": [
+                                "10.1.1.0/24"
+                            ],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "defaultOutboundAccess": true
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                    {
+                        "name": "RemoteVnetToHubPeering_9e02b0a0-8751-4915-865b-4e6cb8431a8c",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('virtualNetworks_Spoke_02_name'), 'RemoteVnetToHubPeering_9e02b0a0-8751-4915-865b-4e6cb8431a8c')]",
+                        "properties": {
+                            "peeringState": "Connected",
+                            "peeringSyncLevel": "FullyInSync",
+                            "remoteVirtualNetwork": {
+                                "id": "[parameters('virtualNetworks_HV_Hub_01_9e84d667_c492_4c39_b9a9_33b56ea1e7b3_externalid')]"
+                            },
+                            "allowVirtualNetworkAccess": true,
+                            "allowForwardedTraffic": false,
+                            "allowGatewayTransit": false,
+                            "useRemoteGateways": true,
+                            "doNotVerifyRemoteGateways": true,
+                            "remoteAddressSpace": {
+                                "addressPrefixes": [
+                                    "10.2.0.0/16"
+                                ]
+                            },
+                            "remoteVirtualNetworkAddressSpace": {
+                                "addressPrefixes": [
+                                    "10.2.0.0/16"
+                                ]
+                            }
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+                    }
+                ],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualWans",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('virtualWans_Vwan_01_name')]",
+            "location": "eastus",
+            "properties": {
+                "disableVpnEncryption": false,
+                "allowBranchToBranchTraffic": true,
+                "office365LocalBreakoutCategory": "None",
+                "type": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2023-03-01",
+            "name": "[parameters('virtualMachines_Srv_workload_01_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_Srv_workload_01nic_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS1_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_Srv_workload_01_name'), '_disk1_9e0e466d7d1f4b0c9b640d5af2c6afa8')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_Srv_workload_01_name'), '_disk1_9e0e466d7d1f4b0c9b640d5af2c6afa8'))]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_Srv_workload_01_name')]",
+                    "adminUsername": "TestUser",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true,
+                        "patchSettings": {
+                            "patchMode": "AutomaticByOS",
+                            "assessmentMode": "ImageDefault"
+                        },
+                        "enableVMAgentPlatformUpdates": false
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_Srv_workload_01nic_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2023-03-01",
+            "name": "[parameters('virtualMachines_Srv_workload_02_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_Srv_workload_02nic_name'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS1_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_Srv_workload_02_name'), '_disk1_57cbaff9b8e641bcb029e383eea48b99')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('virtualMachines_Srv_workload_02_name'), '_disk1_57cbaff9b8e641bcb029e383eea48b99'))]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_Srv_workload_02_name')]",
+                    "adminUsername": "TestUser",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true,
+                        "patchSettings": {
+                            "patchMode": "AutomaticByOS",
+                            "assessmentMode": "ImageDefault"
+                        },
+                        "enableVMAgentPlatformUpdates": false
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_Srv_workload_02nic_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('firewallPolicies_Policy_01_name'), '/DefaultApplicationRuleCollectionGroup')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicies_Policy_01_name'))]"
+            ],
+            "properties": {
+                "priority": 300,
+                "ruleCollections": [
+                    {
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "rules": [
+                            {
+                                "ruleType": "ApplicationRule",
+                                "name": "Allow-msft",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Http",
+                                        "port": 80
+                                    },
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [],
+                                "webCategories": [],
+                                "targetFqdns": [
+                                    "*.microsoft.com"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "httpHeadersToInsert": []
+                            }
+                        ],
+                        "name": "App-RC-01",
+                        "priority": 100
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('firewallPolicies_Policy_01_name'), '/DefaultDnatRuleCollectionGroup')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicies_Policy_01_name'))]"
+            ],
+            "properties": {
+                "priority": 100,
+                "ruleCollections": [
+                    {
+                        "ruleCollectionType": "FirewallPolicyNatRuleCollection",
+                        "action": {
+                            "type": "Dnat"
+                        },
+                        "rules": [
+                            {
+                                "ruleType": "NatRule",
+                                "name": "Allow-rdp",
+                                "translatedAddress": "10.0.1.4",
+                                "translatedPort": "3389",
+                                "ipProtocols": [
+                                    "TCP"
+                                ],
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                    "172.203.152.63"
+                                ],
+                                "destinationPorts": [
+                                    "3389"
+                                ]
+                            }
+                        ],
+                        "name": "dnat-rdp",
+                        "priority": 100
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('firewallPolicies_Policy_01_name'), '/DefaultNetworkRuleCollectionGroup')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicies_Policy_01_name'))]"
+            ],
+            "properties": {
+                "priority": 200,
+                "ruleCollections": [
+                    {
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "rules": [
+                            {
+                                "ruleType": "NetworkRule",
+                                "name": "Allow-vnet",
+                                "ipProtocols": [
+                                    "TCP"
+                                ],
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                    "10.1.1.4"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                    "3389"
+                                ]
+                            }
+                        ],
+                        "name": "vnet-rdp",
+                        "priority": 100
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('networkInterfaces_Srv_workload_01nic_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Spoke_01_name'), 'Workload-01-SN')]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_Srv_workload_01nic_name')), '/ipConfigurations/ipconfig1')]",
+                        "etag": "W/\"ef856b54-faf7-4e91-849b-9bc2e2c1e17a\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.0.1.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Spoke_01_name'), 'Workload-01-SN')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "disableTcpStateTracking": false,
+                "nicType": "Standard",
+                "auxiliaryMode": "None",
+                "auxiliarySku": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('networkInterfaces_Srv_workload_02nic_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Spoke_02_name'), 'Workload-02-SN')]"
+            ],
+            "kind": "Regular",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_Srv_workload_02nic_name')), '/ipConfigurations/ipconfig1')]",
+                        "etag": "W/\"7dc4829c-fbcc-4b90-895e-4140400b5164\"",
+                        "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.1.1.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Spoke_02_name'), 'Workload-02-SN')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "disableTcpStateTracking": false,
+                "nicType": "Standard",
+                "auxiliaryMode": "None",
+                "auxiliarySku": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualHubs/hubRouteTables",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualHubs_Hub_01_name'), '/noneRouteTable')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_Hub_01_name'))]"
+            ],
+            "properties": {
+                "routes": [],
+                "labels": [
+                    "none"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualNetworks_Spoke_01_name'), '/Workload-01-SN')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Spoke_01_name'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "10.0.1.0/24"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled",
+                "defaultOutboundAccess": true
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualNetworks_Spoke_02_name'), '/Workload-02-SN')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Spoke_02_name'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "10.1.1.0/24"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled",
+                "defaultOutboundAccess": true
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualNetworks_Spoke_01_name'), '/RemoteVnetToHubPeering_9e02b0a0-8751-4915-865b-4e6cb8431a8c')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Spoke_01_name'))]"
+            ],
+            "properties": {
+                "peeringState": "Connected",
+                "peeringSyncLevel": "FullyInSync",
+                "remoteVirtualNetwork": {
+                    "id": "[parameters('virtualNetworks_HV_Hub_01_9e84d667_c492_4c39_b9a9_33b56ea1e7b3_externalid')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": false,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": true,
+                "doNotVerifyRemoteGateways": true,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/16"
+                    ]
+                },
+                "remoteVirtualNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/16"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualNetworks_Spoke_02_name'), '/RemoteVnetToHubPeering_9e02b0a0-8751-4915-865b-4e6cb8431a8c')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Spoke_02_name'))]"
+            ],
+            "properties": {
+                "peeringState": "Connected",
+                "peeringSyncLevel": "FullyInSync",
+                "remoteVirtualNetwork": {
+                    "id": "[parameters('virtualNetworks_HV_Hub_01_9e84d667_c492_4c39_b9a9_33b56ea1e7b3_externalid')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": false,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": true,
+                "doNotVerifyRemoteGateways": true,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/16"
+                    ]
+                },
+                "remoteVirtualNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/16"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/azureFirewalls",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('azureFirewalls_AzureFirewall_Hub_01_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_Hub_01_name'))]",
+                "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicies_Policy_01_name'))]"
+            ],
+            "properties": {
+                "sku": {
+                    "name": "AZFW_Hub",
+                    "tier": "Standard"
+                },
+                "additionalProperties": {},
+                "virtualHub": {
+                    "id": "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_Hub_01_name'))]"
+                },
+                "hubIPAddresses": {
+                    "privateIPAddress": "10.2.64.4",
+                    "publicIPs": {
+                        "addresses": [
+                            {
+                                "address": "172.203.152.63"
+                            }
+                        ],
+                        "count": 1
+                    }
+                },
+                "firewallPolicy": {
+                    "id": "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicies_Policy_01_name'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualHubs",
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('virtualHubs_Hub_01_name')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualWans', parameters('virtualWans_Vwan_01_name'))]",
+                "[resourceId('Microsoft.Network/azureFirewalls', parameters('azureFirewalls_AzureFirewall_Hub_01_name'))]"
+            ],
+            "properties": {
+                "virtualHubRouteTableV2s": [],
+                "addressPrefix": "10.2.0.0/16",
+                "virtualRouterAsn": 65515,
+                "virtualRouterIps": [
+                    "10.2.32.4",
+                    "10.2.32.5"
+                ],
+                "routeTable": {
+                    "routes": []
+                },
+                "virtualRouterAutoScaleConfiguration": {
+                    "minCapacity": 2
+                },
+                "virtualWan": {
+                    "id": "[resourceId('Microsoft.Network/virtualWans', parameters('virtualWans_Vwan_01_name'))]"
+                },
+                "azureFirewall": {
+                    "id": "[resourceId('Microsoft.Network/azureFirewalls', parameters('azureFirewalls_AzureFirewall_Hub_01_name'))]"
+                },
+                "sku": "Standard",
+                "routingState": "Provisioned",
+                "allowBranchToBranchTraffic": false,
+                "hubRoutingPreference": "ExpressRoute"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualHubs/hubRouteTables",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualHubs_Hub_01_name'), '/defaultRouteTable')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_Hub_01_name'))]",
+                "[resourceId('Microsoft.Network/azureFirewalls', parameters('azureFirewalls_AzureFirewall_Hub_01_name'))]"
+            ],
+            "properties": {
+                "routes": [
+                    {
+                        "name": "_policy_PublicTraffic",
+                        "destinationType": "CIDR",
+                        "destinations": [
+                            "0.0.0.0/0"
+                        ],
+                        "nextHopType": "ResourceId",
+                        "nextHop": "[resourceId('Microsoft.Network/azureFirewalls', parameters('azureFirewalls_AzureFirewall_Hub_01_name'))]"
+                    },
+                    {
+                        "name": "_policy_PrivateTraffic",
+                        "destinationType": "CIDR",
+                        "destinations": [
+                            "10.0.0.0/8",
+                            "172.16.0.0/12",
+                            "192.168.0.0/16"
+                        ],
+                        "nextHopType": "ResourceId",
+                        "nextHop": "[resourceId('Microsoft.Network/azureFirewalls', parameters('azureFirewalls_AzureFirewall_Hub_01_name'))]"
+                    }
+                ],
+                "labels": [
+                    "default"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualHubs/routingIntent",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualHubs_Hub_01_name'), '/', parameters('virtualHubs_Hub_01_name'), '_RoutingIntent')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_Hub_01_name'))]",
+                "[resourceId('Microsoft.Network/azureFirewalls', parameters('azureFirewalls_AzureFirewall_Hub_01_name'))]"
+            ],
+            "properties": {
+                "routingPolicies": [
+                    {
+                        "name": "PublicTraffic",
+                        "destinations": [
+                            "Internet"
+                        ],
+                        "nextHop": "[resourceId('Microsoft.Network/azureFirewalls', parameters('azureFirewalls_AzureFirewall_Hub_01_name'))]"
+                    },
+                    {
+                        "name": "PrivateTraffic",
+                        "destinations": [
+                            "PrivateTraffic"
+                        ],
+                        "nextHop": "[resourceId('Microsoft.Network/azureFirewalls', parameters('azureFirewalls_AzureFirewall_Hub_01_name'))]"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualHubs/hubVirtualNetworkConnections",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualHubs_Hub_01_name'), '/hub-spoke-01')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_Hub_01_name'))]",
+                "[resourceId('Microsoft.Network/virtualHubs/hubRouteTables', parameters('virtualHubs_Hub_01_name'), 'defaultRouteTable')]",
+                "[resourceId('Microsoft.Network/virtualHubs/hubRouteTables', parameters('virtualHubs_Hub_01_name'), 'noneRouteTable')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Spoke_01_name'))]"
+            ],
+            "properties": {
+                "routingConfiguration": {
+                    "associatedRouteTable": {
+                        "id": "[resourceId('Microsoft.Network/virtualHubs/hubRouteTables', parameters('virtualHubs_Hub_01_name'), 'defaultRouteTable')]"
+                    },
+                    "propagatedRouteTables": {
+                        "labels": [
+                            "none"
+                        ],
+                        "ids": [
+                            {
+                                "id": "[resourceId('Microsoft.Network/virtualHubs/hubRouteTables', parameters('virtualHubs_Hub_01_name'), 'noneRouteTable')]"
+                            }
+                        ]
+                    },
+                    "vnetRoutes": {
+                        "staticRoutes": [],
+                        "staticRoutesConfig": {
+                            "vnetLocalRouteOverrideCriteria": "Contains"
+                        }
+                    }
+                },
+                "remoteVirtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Spoke_01_name'))]"
+                },
+                "allowHubToRemoteVnetTransit": true,
+                "allowRemoteVnetToUseHubVnetGateways": true,
+                "enableInternetSecurity": true
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualHubs/hubVirtualNetworkConnections",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('virtualHubs_Hub_01_name'), '/hub-spoke-02')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualHubs', parameters('virtualHubs_Hub_01_name'))]",
+                "[resourceId('Microsoft.Network/virtualHubs/hubRouteTables', parameters('virtualHubs_Hub_01_name'), 'defaultRouteTable')]",
+                "[resourceId('Microsoft.Network/virtualHubs/hubRouteTables', parameters('virtualHubs_Hub_01_name'), 'noneRouteTable')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Spoke_02_name'))]"
+            ],
+            "properties": {
+                "routingConfiguration": {
+                    "associatedRouteTable": {
+                        "id": "[resourceId('Microsoft.Network/virtualHubs/hubRouteTables', parameters('virtualHubs_Hub_01_name'), 'defaultRouteTable')]"
+                    },
+                    "propagatedRouteTables": {
+                        "labels": [
+                            "none"
+                        ],
+                        "ids": [
+                            {
+                                "id": "[resourceId('Microsoft.Network/virtualHubs/hubRouteTables', parameters('virtualHubs_Hub_01_name'), 'noneRouteTable')]"
+                            }
+                        ]
+                    },
+                    "vnetRoutes": {
+                        "staticRoutes": [],
+                        "staticRoutesConfig": {
+                            "vnetLocalRouteOverrideCriteria": "Contains"
+                        }
+                    }
+                },
+                "remoteVirtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Spoke_02_name'))]"
+                },
+                "allowHubToRemoteVnetTransit": true,
+                "allowRemoteVnetToUseHubVnetGateways": true,
+                "enableInternetSecurity": true
+            }
+        }
+    ]
+}
