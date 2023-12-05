@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_az700drendon_name": {
+            "value": null
+        },
+        "virtualMachines_myVM_name": {
+            "value": null
+        },
+        "bastionHosts_myBastion_name": {
+            "value": null
+        },
+        "virtualNetworks_MyVNet_name": {
+            "value": null
+        },
+        "networkInterfaces_myNicVM_name": {
+            "value": null
+        },
+        "publicIPAddresses_myBastionIP_name": {
+            "value": null
+        },
+        "privateEndpoints_myPrivateEndpoint_name": {
+            "value": null
+        },
+        "serverfarms_AppServicePlan_az700drendon_name": {
+            "value": null
+        },
+        "storageAccounts_mpncreatemyvm120519200_name": {
+            "value": null
+        },
+        "privateDnsZones_privatelink_azurewebsites_net_name": {
+            "value": null
+        }
+    }
+}

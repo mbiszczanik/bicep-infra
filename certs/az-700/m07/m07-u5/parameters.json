@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_ContosoPublic_name": {
+            "value": null
+        },
+        "virtualMachines_ContosoPrivate_name": {
+            "value": null
+        },
+        "virtualNetworks_CoreServicesVNet_name": {
+            "value": null
+        },
+        "publicIPAddresses_ContosoPublic_ip_name": {
+            "value": null
+        },
+        "storageAccounts_contosostoragebish_name": {
+            "value": null
+        },
+        "networkInterfaces_ContosoPublic_nic_name": {
+            "value": null
+        },
+        "publicIPAddresses_ContosoPrivate_ip_name": {
+            "value": null
+        },
+        "networkInterfaces_ContosoPrivate_nic_name": {
+            "value": null
+        },
+        "networkSecurityGroups_ContosoPrivateNSG_name": {
+            "value": null
+        },
+        "networkSecurityGroups_ContosoPublic_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_ContosoPrivate_nsg_name": {
+            "value": null
+        }
+    }
+}

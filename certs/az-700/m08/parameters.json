@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_myVM11_name": {
+            "value": null
+        },
+        "virtualMachines_myVM12_name": {
+            "value": null
+        },
+        "virtualMachines_myVM13_name": {
+            "value": null
+        },
+        "virtualMachines_myVM21_name": {
+            "value": null
+        },
+        "virtualNetworks_IntLB_VNet_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic11_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic12_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic13_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic21_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic22_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic23_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic31_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic32_name": {
+            "value": null
+        },
+        "networkInterfaces_myVMnic33_name": {
+            "value": null
+        },
+        "networkSecurityGroups_myNSG_name": {
+            "value": null
+        },
+        "publicIPAddresses_myBastionIP_name": {
+            "value": null
+        },
+        "bastionHosts_IntLB_VNet_Bastion_name": {
+            "value": null
+        },
+        "loadBalancers_myIntLoadBalancer_name": {
+            "value": null
+        },
+        "workspaces_myLAworkspace_name": {
+            "value": null
+        },
+        "disks_myVM22_disk1_0c1ea4e593c946af95c6c610a746f0bc_name": {
+            "value": null
+        },
+        "disks_myVM23_disk1_bbf612b8ef48488881ad0a029865058d_name": {
+            "value": null
+        },
+        "disks_myVM31_disk1_6e0ba89f9b3144caa7a4fd4e42967e11_name": {
+            "value": null
+        },
+        "disks_myVM32_disk1_5a0e6a67254d4beea310b355843bbe06_name": {
+            "value": null
+        },
+        "disks_myVM33_disk1_79ec9c8bff634e09abde9edd77db475c_name": {
+            "value": null
+        }
+    }
+}
