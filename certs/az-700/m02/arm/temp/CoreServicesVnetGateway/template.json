@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworkGateways_CoreServicesVnetGateway_name": {
+            "defaultValue": "CoreServicesVnetGateway",
+            "type": "String"
+        },
+        "publicIPAddresses_CoreServicesVnetGateway_ip_externalid": {
+            "defaultValue": "/subscriptions/033dd423-eb29-4416-90cd-a47c6bebf420/resourceGroups/ContosoResourceGroup/providers/Microsoft.Network/publicIPAddresses/CoreServicesVnetGateway-ip",
+            "type": "String"
+        },
+        "virtualNetworks_CoreServicesVnet_externalid": {
+            "defaultValue": "/subscriptions/033dd423-eb29-4416-90cd-a47c6bebf420/resourceGroups/ContosoResourceGroup/providers/Microsoft.Network/virtualNetworks/CoreServicesVnet",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2023-09-01",
+            "name": "[parameters('virtualNetworkGateways_CoreServicesVnetGateway_name')]",
+            "location": "eastus",
+            "properties": {
+                "enablePrivateIpAddress": false,
+                "ipConfigurations": [
+                    {
+                        "name": "default",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_CoreServicesVnetGateway_name')), '/ipConfigurations/default')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[parameters('publicIPAddresses_CoreServicesVnetGateway_ip_externalid')]"
+                            },
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_CoreServicesVnet_externalid'), '/subnets/GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "natRules": [],
+                "virtualNetworkGatewayPolicyGroups": [],
+                "enableBgpRouteTranslationForNat": false,
+                "disableIPSecReplayProtection": false,
+                "sku": {
+                    "name": "VpnGw1",
+                    "tier": "VpnGw1"
+                },
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false,
+                "activeActive": false,
+                "bgpSettings": {
+                    "asn": 65515,
+                    "bgpPeeringAddress": "10.20.0.30",
+                    "peerWeight": 0,
+                    "bgpPeeringAddresses": [
+                        {
+                            "ipconfigurationId": "[concat(resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_CoreServicesVnetGateway_name')), '/ipConfigurations/default')]",
+                            "customBgpIpAddresses": []
+                        }
+                    ]
+                },
+                "vpnGatewayGeneration": "Generation1",
+                "allowRemoteVnetTraffic": false,
+                "allowVirtualWanTraffic": false
+            }
+        }
+    ]
+}

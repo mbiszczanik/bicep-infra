@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_ResearchVnet_name": {
+            "value": null
+        },
+        "virtualMachines_CoreServicesVM_name": {
+            "value": null
+        },
+        "virtualMachines_ManufacturingVM_name": {
+            "value": null
+        },
+        "virtualNetworks_CoreServicesVnet_name": {
+            "value": null
+        },
+        "virtualNetworks_ManufacturingVnet_name": {
+            "value": null
+        },
+        "publicIPAddresses_CoreServicesVM_ip_name": {
+            "value": null
+        },
+        "networkInterfaces_CoreServicesVM_nic_name": {
+            "value": null
+        },
+        "publicIPAddresses_ManufacturingVM_ip_name": {
+            "value": null
+        },
+        "networkInterfaces_ManufacturingVM_nic_name": {
+            "value": null
+        },
+        "networkSecurityGroups_CoreServicesVM_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_ManufacturingVM_nsg_name": {
+            "value": null
+        },
+        "publicIPAddresses_CoreServicesVnetGateway_ip_name": {
+            "value": null
+        },
+        "connections_CoreServicesGW_to_ManufacturingGW_name": {
+            "value": null
+        },
+        "connections_ManufacturingGW_to_CoreServicesGW_name": {
+            "value": null
+        },
+        "publicIPAddresses_ManufacturingVnetGateway_ip_name": {
+            "value": null
+        },
+        "virtualNetworkGateways_CoreServicesVnetGateway_name": {
+            "value": null
+        },
+        "virtualNetworkGateways_ManufacturingVnetGateway_name": {
+            "value": null
+        }
+    }
+}
