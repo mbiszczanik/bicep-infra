@@ -7,7 +7,6 @@ New-AzResourceGroupDeployment `
 -Verbose
 
 Start-AzVM -ResourceGroupName -Name "CoreServicesVM" "ContosoResourceGroup"
-
 Stop-AzVM -ResourceGroupName -Name "CoreServicesVM" "ContosoResourceGroup" 
 
 */
