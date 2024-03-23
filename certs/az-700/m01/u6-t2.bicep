@@ -14,8 +14,5 @@ resource privateDnsZones_contoso_com_name_coreservicesvnetlink 'Microsoft.Networ
       id: virtualNetworks_CoreServicesVnet_externalid
     }
   }
-  dependsOn: [
-    
-  ]
 }
 
