@@ -40,6 +40,6 @@ New-AzResourceGroupDeployment `
 -TemplateFile .\u6-t3-deploy.bicep `
 -Verbose
 
-Start-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup"
-Stop-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup" 
+Start-AzVM -ResourceGroupName -Name "testvm1" "ContosoResourceGroup"
+Stop-AzVM -ResourceGroupName -Name "testvm1" "ContosoResourceGroup" 
 ```
