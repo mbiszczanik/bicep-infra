@@ -37,7 +37,7 @@ New-AzResourceGroupDeployment `
 New-AzResourceGroupDeployment `
 -Name "Az-700" `
 -ResourceGroupName "ContosoResourceGroup" `
--TemplateFile .\u6-t3-ManufacturingVM.bicep `
+-TemplateFile .\u6-t3-deploy.bicep `
 -Verbose
 
 Start-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup"
