@@ -1,17 +1,4 @@
-/* 
-
-New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
--TemplateFile .\ManufacturingVMazuredeploy.bicep `
--TemplateParameterFile .\.parameters\ManufacturingVMazuredeploy.bicepparam `
--Verbose
-
-Start-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup"
-
-Stop-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup" 
-
-*/
+// Task 3: Create Virtual Machines to test the configuration
 @description('description')
 param vmName1 string = 'ManufacturingVM'
 

@@ -31,3 +31,15 @@ New-AzResourceGroupDeployment `
 -TemplateFile .\u6-t2.bicep `
 -Verbose
 ```
+
+## Task 3: Create Virtual Machines to test the configuration
+```Powershell
+New-AzResourceGroupDeployment `
+-Name "Az-700" `
+-ResourceGroupName "ContosoResourceGroup" `
+-TemplateFile .\u6-t3-ManufacturingVM.bicep `
+-Verbose
+
+Start-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup"
+Stop-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup" 
+```

@@ -1,4 +1,5 @@
 // Task 2: Link subnet for auto registration
+// Check to be working
 
 param privateDNSZone_Name string = 'contoso.com'
 param privateDnsZones_contoso_com_name_resource string = resourceId('Microsoft.Network/privateDnsZones', privateDNSZone_Name)
