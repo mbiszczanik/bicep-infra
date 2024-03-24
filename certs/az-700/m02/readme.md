@@ -56,6 +56,15 @@ New-AzResourceGroupDeployment `
 -Verbose
 ```
 
+## Task 3: Connect a VNet to the Virtual Hub
+```Powershell
+New-AzResourceGroupDeployment `
+-Name 'Deploy_U7-T3' `
+-ResourceGroupName $RGName `
+-TemplateFile .\u7-t3.bicep `
+-Verbose
+```
+
 ## Clean up resources
 ```Powershell
 Remove-AzResourceGroup -Name $RGName -Force -AsJob
