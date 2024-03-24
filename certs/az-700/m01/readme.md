@@ -43,3 +43,8 @@ New-AzResourceGroupDeployment `
 Start-AzVM -ResourceGroupName -Name "testvm1" "ContosoResourceGroup"
 Stop-AzVM -ResourceGroupName -Name "testvm1" "ContosoResourceGroup" 
 ```
+
+## Clean up resources
+```Powershell
+Remove-AzResourceGroup -Name 'ContosoResourceGroup' -Force -AsJob
+```
