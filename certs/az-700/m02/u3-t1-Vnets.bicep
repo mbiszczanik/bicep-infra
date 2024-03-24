@@ -1,15 +1,5 @@
 /* 
-
-New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
--TemplateFile .\azuredeploy.bicep `
--Verbose
-
-Start-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup"
-
-Stop-AzVM -ResourceGroupName -Name "ManufacturingVM" "ContosoResourceGroup" 
-
+Task 1: Create CoreServicesVnet and ManufacturingVnet
 */
 
 param virtualNetworks_ResearchVnet_name string = 'ResearchVnet'

@@ -1,14 +1,5 @@
 /* 
-
-New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
--TemplateFile .\CoreServicesVMazuredeploy.bicep `
--Verbose
-
-Start-AzVM -ResourceGroupName -Name "CoreServicesVM" "ContosoResourceGroup"
-Stop-AzVM -ResourceGroupName -Name "CoreServicesVM" "ContosoResourceGroup" 
-
+Task 2: Create CoreServicesVM
 */
 
 @description('description')

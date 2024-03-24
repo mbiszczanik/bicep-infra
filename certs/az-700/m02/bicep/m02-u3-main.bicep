@@ -17,7 +17,7 @@ Task 7: Test connection
 New-AzResourceGroupDeployment `
 -Name "Az-700" `
 -ResourceGroupName "ContosoResourceGroup" `
--TemplateFile .\m02-u3.bicep `
+-TemplateFile .\m02-u3-main.bicep `
 -Verbose
 
 */
