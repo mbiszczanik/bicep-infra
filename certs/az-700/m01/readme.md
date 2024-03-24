@@ -1,14 +1,16 @@
 # Unit 04
 ## Task 1: Create the Contoso resource group
 ```Powershell
-New-AzResourceGroup -Name ContosoResourceGroup -Location "East US"
+$DeploymentName = "Az700"
+$RGName = "ContosoResourceGroup"
+New-AzResourceGroup -Name $RGName -Location "East US"
 ```
 
 ## Task 3, 4, 5;
 ```Powershell
 New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
+-Name $DeploymentName `
+-ResourceGroupName $RGName `
 -TemplateFile .\m01-u4-main.bicep `
 -Verbose
 ```
@@ -17,8 +19,8 @@ New-AzResourceGroupDeployment `
 ## Task 1: Create a private DNS Zone
 ```Powershell
 New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
+-Name $DeploymentName `
+-ResourceGroupName $RGName `
 -TemplateFile .\u6-t1.bicep `
 -Verbose
 ```
@@ -26,8 +28,8 @@ New-AzResourceGroupDeployment `
 ## Task 2: Link subnet for auto registration
 ```Powershell
 New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
+-Name $DeploymentName `
+-ResourceGroupName $RGName `
 -TemplateFile .\u6-t2.bicep `
 -Verbose
 ```
@@ -35,16 +37,35 @@ New-AzResourceGroupDeployment `
 ## Task 3: Create Virtual Machines to test the configuration
 ```Powershell
 New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
+-Name $DeploymentName `
+-ResourceGroupName $RGName `
 -TemplateFile .\u6-t3-deploy.bicep `
 -Verbose
 
-Start-AzVM -ResourceGroupName -Name "testvm1" "ContosoResourceGroup"
-Stop-AzVM -ResourceGroupName -Name "testvm1" "ContosoResourceGroup" 
+Start-AzVM -ResourceGroupName -Name "testvm1" $RGName
+Stop-AzVM -ResourceGroupName -Name "testvm1" $RGName 
+```
+
+# Unit 08
+## Task 1: Create a Virtual Machine to test the configuration
+```Powershell
+New-AzResourceGroupDeployment `
+-Name $DeploymentName `
+-ResourceGroupName $RGName `
+-TemplateFile .\u8-t1-deploy.bicep `
+-Verbose
+```
+
+## Task 4: Create VNet peerings between CoreServicesVnet and ManufacturingVnet
+```Powershell
+New-AzResourceGroupDeployment `
+-Name $DeploymentName `
+-ResourceGroupName $RGName `
+-TemplateFile .\u8-t4.bicep `
+-Verbose
 ```
 
 ## Clean up resources
 ```Powershell
-Remove-AzResourceGroup -Name 'ContosoResourceGroup' -Force -AsJob
+Remove-AzResourceGroup -Name $RGName -Force -AsJob
 ```

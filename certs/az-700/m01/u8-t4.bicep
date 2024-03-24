@@ -36,24 +36,32 @@ resource existingLocalVirtualNetworkName_peering_to_remote_vnet 'Microsoft.Netwo
   name: '${existingLocalVirtualNetworkName}/CoreServicesVnet-to-ManufacturingVnet'
   properties: {
     allowVirtualNetworkAccess: true
-    allowForwardedTraffic: false
+    allowForwardedTraffic: true
     allowGatewayTransit: false
     useRemoteGateways: false
     remoteVirtualNetwork: {
-      id: resourceId(existingRemoteVirtualNetworkResourceGroupName, 'Microsoft.Network/virtualNetworks', existingRemoteVirtualNetworkName)
+      id: resourceId(
+        existingRemoteVirtualNetworkResourceGroupName,
+        'Microsoft.Network/virtualNetworks',
+        existingRemoteVirtualNetworkName
+      )
     }
   }
 }
 
 resource existingRemoteVirtualNetworkName_peering_to_local_vnet 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2023-05-01' = {
-  name: '${existingRemoteVirtualNetworkName}/ManufacturingVnet-to-CoreServicesVnet'
+  name: '${existingRemoteVirtualNetworkName}/ManufacturingVnet-to-CoreServicFesVnet'
   properties: {
     allowVirtualNetworkAccess: true
-    allowForwardedTraffic: false
+    allowForwardedTraffic: true
     allowGatewayTransit: false
     useRemoteGateways: false
     remoteVirtualNetwork: {
-      id: resourceId(existingRemoteVirtualNetworkResourceGroupName, 'Microsoft.Network/virtualNetworks', existingLocalVirtualNetworkName)
+      id: resourceId(
+        existingRemoteVirtualNetworkResourceGroupName,
+        'Microsoft.Network/virtualNetworks',
+        existingLocalVirtualNetworkName
+      )
     }
   }
 }

@@ -31,9 +31,9 @@ param location string = resourceGroup().location
 
 param virtualMachine_1_Name string = 'TestVM1'
 param virtualMachine_2_Name string = 'TestVM2'
-param virtualMachine_AdminUsername string = 'administrrator'
+param virtualMachine_AdminUsername string = 'TestUser'
 @secure()
-param virtualMachine_AdminPassword string 
+param virtualMachine_AdminPassword string
 
 param networkInterface_1_Name string = '${virtualMachine_1_Name}-NIC'
 param networkInterface_2_Name string = '${virtualMachine_2_Name}-NIC'
@@ -56,7 +56,11 @@ var virtualNetwork_CoreServicesVnet_Name = 'CoreServicesVnet'
 var virtualNetwork_Subnet_Name = 'DatabaseSubnet'
 
 var virtualNetworkLink_VnetId = '/subscriptions/033dd423-eb29-4416-90cd-a47c6bebf420/resourceGroups/ContosoResourceGroup/providers/Microsoft.Network/virtualNetworks/CoreServicesVnet' // resourceId('MicrosoftNetwork/virtualNetworks', virtualNetwork_CoreServicesVnet_Name)
-var virtualNetworkLink_SubnetRef = resourceId('MicrosoftNetwork/virtualNetworks/subnets', virtualNetwork_CoreServicesVnet_Name, virtualNetwork_Subnet_Name)
+var virtualNetworkLink_SubnetRef = resourceId(
+  'MicrosoftNetwork/virtualNetworks/subnets',
+  virtualNetwork_CoreServicesVnet_Name,
+  virtualNetwork_Subnet_Name
+)
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 
@@ -99,9 +103,6 @@ resource virtualMachine_TestVM1 'Microsoft.Compute/virtualMachines@2023-07-01' =
       }
       osDisk: {
         createOption: 'FromImage'
-        managedDisk: {
-          storageAccountType: 'Standard_LRS'
-        }
       }
       dataDisks: []
     }
@@ -199,9 +200,6 @@ resource virtualMachine_TestVM2 'Microsoft.Compute/virtualMachines@2023-07-01' =
       }
       osDisk: {
         createOption: 'FromImage'
-        managedDisk: {
-          storageAccountType: 'Standard_LRS'
-        }
       }
       dataDisks: []
     }
