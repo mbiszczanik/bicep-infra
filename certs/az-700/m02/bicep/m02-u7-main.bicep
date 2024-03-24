@@ -61,7 +61,7 @@ resource virtualNetwork_ResearchVnet 'Microsoft.Network/virtualNetworks@2023-05-
 
 resource virtualWAN_Contoso 'Microsoft.Network/virtualWans@2023-05-01' = {
   name: virtualWan_name
-  location: 'global'
+  location: location_westus
   properties: {
     type: 'Standard'
     disableVpnEncryption: false

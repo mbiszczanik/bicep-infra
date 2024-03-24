@@ -37,22 +37,22 @@ Start-AzVM -ResourceGroupName $RGName -Name "ManufacturingVM"
 Stop-AzVM -ResourceGroupName $RGName -Name "ManufacturingVM" 
 ```
 
-# Unit 8
-## Task 1: Create a Virtual Machine to test the configuration
+# Unit 7
+## Task 1: Create a Virtual WAN
 ```Powershell
 New-AzResourceGroupDeployment `
--Name 'Deploy_U8-T1' `
+-Name 'Deploy_U7-T1' `
 -ResourceGroupName $RGName `
--TemplateFile .\u8-t1-deploy.bicep `
+-TemplateFile .\u7-t1.bicep `
 -Verbose
 ```
 
-## Task 4: Create VNet peerings between CoreServicesVnet and ManufacturingVnet
+## Task 2: Create a hub
 ```Powershell
 New-AzResourceGroupDeployment `
--Name 'Deploy_U8-T4' `
+-Name 'Deploy_U7-T2' `
 -ResourceGroupName $RGName `
--TemplateFile .\u8-t4.bicep `
+-TemplateFile .\u7-t2.bicep `
 -Verbose
 ```
 

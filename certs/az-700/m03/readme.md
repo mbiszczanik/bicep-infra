@@ -32,7 +32,7 @@ New-AzResourceGroupDeployment `
 -Verbose
 ```
 
-## Task 4: Clean up resources
+## Clean up resources
 ```Powershell
 Remove-AzResourceGroup -Name 'ContosoResourceGroup' -Force -AsJob
 Remove-AzResourceGroup -Name 'ExpressRouteResourceGroup' -Force -AsJob
