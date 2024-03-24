@@ -1,3 +1,7 @@
+/*
+Task 1: Create a Virtual Machine to test the configuration
+*/ 
+
 @description('description')
 param vmName1 string = 'ManufacturingVM'
 

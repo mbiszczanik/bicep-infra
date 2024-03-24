@@ -1,4 +1,6 @@
-// Task 1: Create a private DNS Zone
+/*
+Task 1: Create a private DNS Zone
+*/
 
 param privateDnsZones_contoso_com_name string = 'contoso.com'
 
@@ -13,7 +15,6 @@ resource privateDnsZones_contoso_com_name_resource 'Microsoft.Network/privateDns
     numberOfVirtualNetworkLinks: 0
     numberOfVirtualNetworkLinksWithRegistration: 0
     provisioningState: 'Succeeded'
-  
   }
 }
 

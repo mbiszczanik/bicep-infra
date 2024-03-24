@@ -1,22 +1,5 @@
 /*
-SUMMARY: Az-700 hands-on labs
-DESCRIPTION: M01-Unit 8 Connect two Azure Virtual Networks using global virtual network peering
-AUTHOR/S: Marcin Biszczanik
-VERSION: 1.0.0
-URI: https://learn.microsoft.com/en-us/training/modules/introduction-to-azure-virtual-networks/8-exercise-connect-two-azure-virtual-networks-global
-     https://microsoftlearning.github.io/AZ-700-Designing-and-Implementing-Microsoft-Azure-Networking-Solutions/Instructions/Exercises/M01-Unit%208%20Connect%20two%20Azure%20Virtual%20Networks%20using%20global%20virtual%20network%20peering.html
-
-Task 1: Deploy ManufacturingVMazuredeploy.bicep
-Task 2: Check connection
-Task 3: Deploy m01-u8.bicep
-Task 4: Check connection
-
-New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
--TemplateFile .\m01-u8.bicep `
--Verbose
-
+Task 4: Create VNet peerings between CoreServicesVnet and ManufacturingVnet
 */
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////

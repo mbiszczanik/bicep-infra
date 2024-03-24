@@ -1,4 +1,6 @@
-// Task 3: Create Virtual Machines to test the configuration
+/*
+Task 3: Create Virtual Machines to test the configuration
+*/
 
 @description('description')
 param vmName1 string = 'testvm1'
