@@ -107,6 +107,23 @@ resource vmName_VMConfig 'Microsoft.Compute/virtualMachines/extensions@2023-07-0
   }
 }
 
+// To be tested
+// resource vmFEIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = {
+//   name: 'vm-EnableIIS-Script'
+//   location: location
+//   parent: vm
+//   properties: {
+//     asyncExecution: false
+//     source: {
+//       script: '''
+//         Install-WindowsFeature -name Web-Server -IncludeManagementTools
+//         Remove-Item C:\\inetpub\\wwwroot\\iisstart.htm
+//         Add-Content -Path "C:\\inetpub\\wwwroot\\iisstart.htm" -Value $("Hello from " + $env:computername)  
+//       '''
+//     }
+//   }
+// }
+
 resource nic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
   name: nicName
   location: location
