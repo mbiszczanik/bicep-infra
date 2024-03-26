@@ -1,32 +1,12 @@
-/*
-SUMMARY: 
-DESCRIPTION: 
-AUTHOR/S: Marcin Biszczanik
-VERSION:
-URI: 
-
-New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "IntLB-VNet" `
--TemplateFile .\m04-u4.bicep `
--Verbose
-
-*/
-
 //////////////////////////////////  PARAMETERS //////////////////////////////////
 
 param location_eastus string = 'eastus'
-
 param virtualNetwork_Name string = 'IntLB-VNet'
-
 param virtualNetworks_myBackendSubnet_Name string = 'myBackendSubnet'
 param virtualNetworks_myFrontEndSubnet_Name string = 'myFrontEndSubnet'
 param virtualNetworks_AzureBastionSubnet_Name string = 'AzureBastionSubnet'
-
 param publicIPAdress_Bastion_Name string = 'myBastionIP'
-
 param bastionHost_Name string = 'myBastionHost'
-
 param loadBalancer_Internal_Name string = 'myIntLoadBalancer'
 param loadBalancer_Internal_FrontendIPConfiguration_Name string = 'LoadBalancerFrontEnd'
 param loadBalancer_Internal_Probe_Name  string = 'myHealthProbe'
