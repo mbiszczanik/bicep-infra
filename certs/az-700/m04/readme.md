@@ -44,18 +44,19 @@ New-AzResourceGroupDeployment `
 -Verbose
 ```
 
-## Task 3: Create the load balancer / Task 4: Create load balancer resources
+## Task 2: Create a Traffic Manager profile
 ```Powershell
 New-AzResourceGroupDeployment `
--Name 'Deploy_U4-T3' `
+-Name 'Deploy_U4-T2' `
 -ResourceGroupName $RGName `
--TemplateFile .\u4-t3-Vnets.bicep `
+-TemplateFile .\u4-t2.bicep `
 -Verbose
 ```
 
 
 ## Clean up resources
 ```Powershell
-Remove-AzResourceGroup -Name $RGName -Force -AsJob
+Remove-AzResourceGroup -Name $EusRGName -Force -AsJob
+Remove-AzResourceGroup -Name $WeuRGName -Force -AsJob
 ```
 
