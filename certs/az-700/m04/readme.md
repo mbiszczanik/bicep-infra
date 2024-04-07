@@ -44,7 +44,7 @@ New-AzResourceGroupDeployment `
 -Verbose
 ```
 
-## Task 2: Create a Traffic Manager profile
+## Task 2: Create a Traffic Manager profile / Task 3: Add Traffic Manager endpoints
 ```Powershell
 New-AzResourceGroupDeployment `
 -Name 'Deploy_U4-T2' `
@@ -52,7 +52,8 @@ New-AzResourceGroupDeployment `
 -TemplateFile .\u4-t2.bicep `
 -Verbose
 ```
-
+## Task 4: Test the Traffic Manager profile
+Disable from one of the endpoints and refresh page.
 
 ## Clean up resources
 ```Powershell
