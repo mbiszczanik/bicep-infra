@@ -5,12 +5,12 @@ $RGName = "ContosoResourceGroup"
 New-AzResourceGroup -Name $RGName -Location "East US"
 ```
 
-## Task 3, 4, 5;
+## Task 2, 3, 4;
 ```Powershell
 New-AzResourceGroupDeployment `
 -Name 'Deploy_U4' `
 -ResourceGroupName $RGName `
--TemplateFile .\m01-u4-main.bicep `
+-TemplateFile .\m01-u4.bicep `
 -Verbose
 ```
 
@@ -20,7 +20,7 @@ New-AzResourceGroupDeployment `
 New-AzResourceGroupDeployment `
 -Name 'Deploy_U6-T1' `
 -ResourceGroupName $RGName `
--TemplateFile .\u6-t1.bicep `
+-TemplateFile .\m01-u6-t1.bicep `
 -Verbose
 ```
 
@@ -29,7 +29,7 @@ New-AzResourceGroupDeployment `
 New-AzResourceGroupDeployment `
 -Name 'Deploy_U6-T2' `
 -ResourceGroupName $RGName `
--TemplateFile .\u6-t2.bicep `
+-TemplateFile .\m01-u6-t2.bicep `
 -Verbose
 ```
 
@@ -38,7 +38,7 @@ New-AzResourceGroupDeployment `
 New-AzResourceGroupDeployment `
 -Name 'Deploy_U6-T3' `
 -ResourceGroupName $RGName `
--TemplateFile .\u6-t3-deploy.bicep `
+-TemplateFile .\m01-u6-t3.bicep `
 -Verbose
 
 Start-AzVM -ResourceGroupName $RGName -Name "testvm1" 
@@ -51,7 +51,7 @@ Stop-AzVM -ResourceGroupName $RGName -Name "testvm1"
 New-AzResourceGroupDeployment `
 -Name 'Deploy_U8-T1' `
 -ResourceGroupName $RGName `
--TemplateFile .\u8-t1-deploy.bicep `
+-TemplateFile .\m01-u8-t1.bicep `
 -Verbose
 ```
 

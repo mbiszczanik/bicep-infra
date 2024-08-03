@@ -4,9 +4,16 @@ Task 1: Create a private DNS Zone
 
 param privateDnsZones_contoso_com_name string = 'contoso.com'
 
+var tags = {
+  Environment: 'Training'
+  CostCenter: '00001'
+  MSDN: 'MSDN'
+}
+
 resource privateDnsZones_contoso_com_name_resource 'Microsoft.Network/privateDnsZones@2018-09-01' = {
   name: privateDnsZones_contoso_com_name
   location: 'global'
+  tags: tags
   properties: {
     maxNumberOfRecordSets: 25000
     maxNumberOfVirtualNetworkLinks: 1000

@@ -17,6 +17,8 @@ param location_southeastasia string = 'southeastasia'
 
 var tags = {
   Environment: 'Training'
+  CostCenter: '00001'
+  MSDN: 'MSDN'
 }
 
 var virtualNetwork_CoreServicesVnet_Name = 'CoreServicesVnet'
@@ -81,6 +83,7 @@ resource virtualNetwork_CoreServicesVnet 'Microsoft.Network/virtualNetworks@2019
 resource virtualNetwork_ManufacturingVnet 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: virtualNetwork_ManufacturingVnet_Name
   location: location_westeurope
+  tags: tags
   properties: {
     addressSpace: {
       addressPrefixes: [
