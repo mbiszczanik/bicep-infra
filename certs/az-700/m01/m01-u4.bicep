@@ -5,8 +5,8 @@ AUTHOR/S: Marcin Biszczanik
 VERSION: 1.0.0
 URI: https://learn.microsoft.com/en-us/training/modules/introduction-to-azure-virtual-networks/4-exercise-design-implement-virtual-network-azure
      https://microsoftlearning.github.io/AZ-700-Designing-and-Implementing-Microsoft-Azure-Networking-Solutions/Instructions/Exercises/M01-Unit%204%20Design%20and%20implement%20a%20Virtual%20Network%20in%20Azure.html
-*/
 
+ */
 //////////////////////////////////  PARAMETERS //////////////////////////////////
 
 param location_eastus string = 'eastus'
@@ -28,7 +28,7 @@ var virtualNetwork_ResearchVnet_Name = 'ResearchVnet'
 ////////////////////////////////// RESOURCES //////////////////////////////////
 
 // Task 2: Create the CoreServicesVnet virtual network and subnets
-resource virtualNetwork_CoreServicesVnet 'Microsoft.Network/virtualNetworks@2019-11-01' = {
+resource virtualNetwork_CoreServicesVnet 'Microsoft.Network/virtualNetworks@2024-01-01' = {
   name: virtualNetwork_CoreServicesVnet_Name
   location: location_eastus
   tags: tags
@@ -80,7 +80,7 @@ resource virtualNetwork_CoreServicesVnet 'Microsoft.Network/virtualNetworks@2019
 }
 
 // Task 3: Create the ManufacturingVnet virtual network and subnets
-resource virtualNetwork_ManufacturingVnet 'Microsoft.Network/virtualNetworks@2019-11-01' = {
+resource virtualNetwork_ManufacturingVnet 'Microsoft.Network/virtualNetworks@2024-01-01' = {
   name: virtualNetwork_ManufacturingVnet_Name
   location: location_westeurope
   tags: tags
@@ -132,7 +132,7 @@ resource virtualNetwork_ManufacturingVnet 'Microsoft.Network/virtualNetworks@201
 }
 
 // Task 4: Create the ResearchVnet virtual network and subnets
-resource virtualNetwork_ResearchVnet 'Microsoft.Network/virtualNetworks@2019-11-01' = {
+resource virtualNetwork_ResearchVnet 'Microsoft.Network/virtualNetworks@2024-01-01' = {
   name: virtualNetwork_ResearchVnet_Name
   location: location_southeastasia
   tags: tags
