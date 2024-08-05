@@ -9,20 +9,6 @@ URI: https://learn.microsoft.com/en-us/training/modules/introduction-to-azure-vi
 Task 1: Create a private DNS Zone
 Task 2: Link subnet for auto registration
 Task 3: Create Virtual Machines to test the configuration
-
-New-AzResourceGroupDeployment `
--Name "Az-700" `
--ResourceGroupName "ContosoResourceGroup" `
--Location 'eastus' `
--TemplateFile .\m01-u6.bicep `
--Verbose
-
-Start-AzVM -ResourceGroupName -Name TestVM1 "ContosoResourceGroup"
-Start-AzVM -ResourceGroupName -Name "TestVM2" "ContosoResourceGroup"
-
-Stop-AzVM -ResourceGroupName -Name "TestVM1" "ContosoResourceGroup" 
-Stop-AzVM -ResourceGroupName -Name "TestVM2" "ContosoResourceGroup" 
-
 */
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////

@@ -5,7 +5,7 @@ $RGName = "ContosoResourceGroup"
 New-AzResourceGroup -Name $RGName -Location "East US"
 ```
 
-## Task 2, 3, 4;
+## Task 2, 3, 4
 ```Powershell
 New-AzResourceGroupDeployment `
 -Name 'Deploy_U4' `
