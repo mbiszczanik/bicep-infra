@@ -13,10 +13,19 @@ param logAnalytics_Location string = resourceGroup().location
 param tags object
 
 param logAnalytics_RetentionInDays int = 120
+
+@allowed([
+  'CapacityReservation'
+  'Free'
+  'PerGB2018'
+  'PerNode'
+  'Premium'
+  'Standalone'
+  'Standard'
+])
 param logAnalytics_Sku string = 'Free'
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
-
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 
@@ -25,12 +34,11 @@ resource logAnaylits 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   location: logAnalytics_Location
   tags: tags
   properties: {
-    retentionInDays: logAnalytics_RetentionInDays 
+    retentionInDays: logAnalytics_RetentionInDays
     sku: {
       name: logAnalytics_Sku
     }
   }
-  
 }
 
 //////////////////////////////////  OUTPUT  //////////////////////////////////
