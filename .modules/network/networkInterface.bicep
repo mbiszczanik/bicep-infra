@@ -32,7 +32,7 @@ param networkInterface_ApplicationSecurityGroupId array = []
   'Standard'
 ])
 @description('Type network interface resource')
-param networtkInterface_Type string = 'Standard'
+param networkInterface_Type string = 'Standard'
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 resource networkInterface 'Microsoft.Network/networkInterfaces@2023-04-01' = {
@@ -55,7 +55,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2023-04-01' = {
     ]
     // If there is an ID, an object with it inside is created, if not, it passes null.
     networkSecurityGroup: (networkInterface_NetworkSecurityGroupId != '') ? {id: networkInterface_NetworkSecurityGroupId} : null
-    nicType: networtkInterface_Type
+    nicType: networkInterface_Type
 
   }
 }

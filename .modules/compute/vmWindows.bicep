@@ -19,6 +19,8 @@ param virtualMachine_OSVersion string = '2019-Datacenter'
 param virtualMachine_DiskType string = 'StandardSSD_LRS'
 
 param networkSecurityGroup_name string = '${virtualMachine_Name}-NSG'
+param networkSecurityGroup_Rules array
+
 param networkInterface_Name string = '${virtualMachine_Name}-NIC'
 param networkInterface_NetworkSecurityGroupId string
 param networkInterface_PrivateIpAddress string
@@ -79,6 +81,8 @@ module networkSecurityGroup '../network/networkSecurityGroup.bicep' = {
   params: {
     tags: tags
     networkSecurityGroup_Name: networkSecurityGroup_name
+    networkSecurityGroup_Location: virtualMachine_Location
+    networkSecurityGroup_Rules: networkSecurityGroup_Rules
   }
 }
 
@@ -90,6 +94,7 @@ module networkInterface '../network/networkInterface.bicep' = {
     networkInterface_NetworkSecurityGroupId: networkInterface_NetworkSecurityGroupId
     networkInterface_PrivateIpAddress: networkInterface_PrivateIpAddress
     networkInterface_SubnetId: networkInterface_SubnetId
+    
   }
 }
 
