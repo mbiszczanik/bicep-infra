@@ -11,18 +11,19 @@ URI:
 param virtualMachine_Name string
 param virtualMachine_Location string = resourceGroup().location
 param tags object
-param virtualMachine_Size string
-param virtualMachine_AdminUsername string
+param virtualMachine_Size string = 'Standard_B2ms'
+param virtualMachine_AdminUsername string = '${virtualMachine_Name}Admin'
 @secure()
 param virtualMachine_AdminPassword string
-param virtualMachine_OSVersion string
+param virtualMachine_OSVersion string = '2019-Datacenter'
 param virtualMachine_DiskType string = 'StandardSSD_LRS'
 
-param networkSecurityGroup_name string
-param networkInterface_Name string
+param networkSecurityGroup_name string = '${virtualMachine_Name}-NSG'
+param networkInterface_Name string = '${virtualMachine_Name}-NIC'
 param networkInterface_NetworkSecurityGroupId string
 param networkInterface_PrivateIpAddress string
 param networkInterface_SubnetId string
+param publicIpAddress_Name string = '${virtualMachine_Name}-PIP'
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
 
@@ -88,6 +89,14 @@ module networkInterface '../network/networkInterface.bicep' = {
     networkInterface_NetworkSecurityGroupId: networkInterface_NetworkSecurityGroupId
     networkInterface_PrivateIpAddress: networkInterface_PrivateIpAddress
     networkInterface_SubnetId: networkInterface_SubnetId
+  }
+}
+
+module publicIpAddress '../network/publicIPaddress.bicep' = {
+  name: publicIpAddress_Name
+  params: {
+    tags: tags
+    publicIpAddress_Name: publicIpAddress_Name
   }
 }
 
