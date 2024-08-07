@@ -1,5 +1,5 @@
 # Bicep infrastructure
-Small projects and templates for Bicep
+Projects and templates for Bicep.
 
 # How to
 az bicep install && az bicep upgrade
@@ -7,7 +7,7 @@ az bicep install && az bicep upgrade
 # Deployment
 ## CI/CD
 For CI/CD look at workflows.
-It is still under construction ;)
+Under construction ;)
 
 ## Manual Deployment
 ### PowerShell
