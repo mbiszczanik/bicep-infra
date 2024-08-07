@@ -1,5 +1,5 @@
 /*
-SUMMARY: 
+SUMMARY: Windows Server Virtual
 DESCRIPTION: 
 AUTHOR/S: Marcin Biszczanik
 VERSION:
@@ -50,6 +50,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2024-03-01' = {
         version: 'latest'
       }
       osDisk: {
+        name: '${virtualMachine_Name}-OSDisk'
         createOption: 'FromImage'
         managedDisk: {
           storageAccountType: virtualMachine_DiskType
