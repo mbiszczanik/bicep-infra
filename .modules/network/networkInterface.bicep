@@ -14,6 +14,9 @@ param networkInterface_SubnetId string
 
 param networkInterface_NetworkSecurityGroupId string
 
+@description('IP address version.')
+param networkInterface_IPAddressVersion string = 'IPv4'
+
 @allowed([
   'Dynamic'
   'Static'
@@ -26,6 +29,9 @@ param networkInterface_PrivateIpAddress string
 
 @description('Application Security Group where IP config is attached')
 param networkInterface_ApplicationSecurityGroupId array = []
+
+@description('Public IP address resource.')
+param networkInterface_PublicIPAddressId string = ''
 
 @allowed([
   'Elastic'
@@ -44,9 +50,13 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2023-04-01' = {
       {
         name: 'ipconfig1'
         properties: {
+          privateIPAddressVersion: networkInterface_IPAddressVersion
           privateIPAllocationMethod: networkInterface_PrivateIpAllocationMethod
           privateIPAddress: networkInterface_PrivateIpAddress
           applicationSecurityGroups: networkInterface_ApplicationSecurityGroupId
+          publicIPAddress: networkInterface_PublicIPAddressId == '' ? null : {
+            id: networkInterface_PublicIPAddressId
+          }   
           subnet: {
             id: networkInterface_SubnetId
           }

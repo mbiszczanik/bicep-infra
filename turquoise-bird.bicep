@@ -22,7 +22,7 @@ param virtualNetwork_SubnetName string = 'CoreSubnet'
 param subscriptionId string
 //////////////////////////////////  Virtual Network //////////////////////////////////
 
-param networkInterface_PrivateIpAddress string = '10.1.1.1'
+param networkInterface_PrivateIpAddress string = '10.1.1.4'
 param networkInterface_SubnetId string = resourceId(
   subscriptionId,
   virtualNetwork_RGName_Sub,
@@ -100,21 +100,22 @@ module virtualNetwork '.modules/network/virtualNetwork.bicep' = {
   }
 }
 
-// module virtualMachine '.modules/compute/vmWindows.bicep' = {
-//   scope: resourceGroup(virtualMachine_RG.name)
-//   name: virtualMachine_Name
-//   params: {
-//     tags: tags
-//     networkInterface_NetworkSecurityGroupId: networkSecurityGroup.id
-//     networkSecurityGroup_Rules: networkSecurityGroup_Rules
-//     networkInterface_PrivateIpAddress: networkInterface_PrivateIpAddress
-//     networkInterface_SubnetId: networkInterface_SubnetId
-//     virtualMachine_AdminPassword: virtualMachine_AdminPassword
-//     virtualMachine_Name: virtualMachine_Name
-//   }
-//   dependsOn: [
-//     networkSecurityGroup
-//   ]
-// }
+module virtualMachine '.modules/compute/vmWindows.bicep' = {
+  scope: resourceGroup(virtualMachine_RG.name)
+  name: virtualMachine_Name
+  params: {
+    tags: tags
+    networkInterface_NetworkSecurityGroupId: networkSecurityGroup.id
+    networkSecurityGroup_Rules: networkSecurityGroup_Rules
+    networkInterface_PrivateIpAddress: networkInterface_PrivateIpAddress
+    networkInterface_SubnetId: networkInterface_SubnetId
+    virtualMachine_AdminPassword: virtualMachine_AdminPassword
+    virtualMachine_Name: virtualMachine_Name
+  }
+  dependsOn: [
+    networkSecurityGroup
+  ]
+}
+
 
 //////////////////////////////////  OUTPUT  //////////////////////////////////
