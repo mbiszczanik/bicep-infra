@@ -130,9 +130,9 @@ module mod_VirtualNetwork_Tailwind 'br/public:avm/res/network/virtual-network:0.
 //////////////////////////////////  Network Manager  //////////////////////////////////
 module mod_VirtualNetwork_Manager_Contoso 'br/public:avm/res/network/network-manager:0.4.0' = {
   scope: resourceGroup(mod_ResourceGroup_Contoso.name)
-  name: 'vnetManager' // var_VirtualNetwork_Manager_Contoso_Name
+  name: var_VirtualNetwork_Manager_Contoso_Name
   params: {
-    name: 'vnetManager' // var_VirtualNetwork_Manager_Contoso_Name
+    name: var_VirtualNetwork_Manager_Contoso_Name
     networkManagerScopeAccesses: [
       'Connectivity'
       'SecurityAdmin'

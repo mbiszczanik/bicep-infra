@@ -24,3 +24,11 @@ $operationDetails = $operations | Where-Object { $_.OperationId -eq $operationId
 # Display the detailed error information
 $operationDetails.Properties.StatusMessage | ConvertTo-Json -Depth 10
 ```
+
+
+## Clean up resources
+```Powershell
+Remove-AzResourceGroup -Name Contoso-WEU-VNET-RG -Force -AsJob
+Remove-AzResourceGroup -Name Fabrikam-WEU-VNET-RG -Force -AsJob
+Remove-AzResourceGroup -Name Tailwind-WEU-VNET-RG -Force -AsJob
+```
