@@ -3,18 +3,6 @@ SUMMARY: Vnet Manager demo
 DESCRIPTION: n/a
 AUTHOR/S: Marcin Biszczanik
 VERSION: 0.1.0
-
-***---------- DEPLOYMENT ----------***
-Connect-AzAccount
-###---------- Staging ----------###
-Select-AzSubscription 
-
-New-AzSubscriptionDeployment `
--Name "VNet-Manager-demo" `
--TemplateFile .\demos\VNet-manager-main.bicep `
--Location "North Europe" `
--Verbose
-
 */
 
 targetScope = 'subscription'
@@ -27,15 +15,15 @@ param par_Location_02 string = 'northeurope'
 param par_VirtualMachine_Admin_Password string
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
-var var_VirtualNetwork_Contoso_ResourceGroup_Name = 'Contoso-WEU-VNET-RG'
-var var_VirtualNetwork_Fabrikam_ResourceGroup_Name = 'Fabrikam-WEU-VNET-RG'
-var var_VirtualNetwork_Tailwind_ResourceGroup_Name = 'Tailwind-WEU-VNET-RG'
+var var_VirtualNetwork_Hub01_ResourceGroup_Name = 'Hub01-WEU-VNET-RG'
+var var_VirtualNetwork_Spoke01_ResourceGroup_Name = 'Spoke01-WEU-VNET-RG'
+var var_VirtualNetwork_Spoke02_ResourceGroup_Name = 'Spoke02-WEU-VNET-RG'
 
-var var_VirtualNetwork_Contoso_Name = 'Contoso-WEU-VNET01'
-var var_VirtualNetwork_Fabrikam_Name = 'Fabrikam-WEU-VNET01'
-var var_VirtualNetwork_Tailwind_Name = 'Tailwind-WEU-VNET01'
-var var_VirtualNetwork_Manager_Contoso_Name = 'Contoso-WEU-VNM01'
-var var_VirtualMachine_Name = 'TestContosoVM'
+var var_VirtualNetwork_Hub01_Name = 'Hub01-WEU-VNET01'
+var var_VirtualNetwork_Spoke01_Name = 'Spoke01-WEU-VNET01'
+var var_VirtualNetwork_Spoke02_Name = 'Spoke02-WEU-VNET01'
+var var_VirtualNetwork_Manager_Name = 'Hub01-WEU-AVNM01'
+var var_VirtualMachine_Name = 'TestVM01'
 
 var var_Tags = {
   Environment: 'Training'
@@ -46,38 +34,38 @@ var var_VNet_Manager_Subscription_ID = subscription().subscriptionId
 
 ////////////////////////////////// RESOURCES //////////////////////////////////
 
-module mod_ResourceGroup_Contoso 'br/public:avm/res/resources/resource-group:0.4.0' = {
-  name: var_VirtualNetwork_Contoso_ResourceGroup_Name
+module mod_ResourceGroup_Hub01 'br/public:avm/res/resources/resource-group:0.4.0' = {
+  name: var_VirtualNetwork_Hub01_ResourceGroup_Name
   params: {
-    name: var_VirtualNetwork_Contoso_ResourceGroup_Name
+    name: var_VirtualNetwork_Hub01_ResourceGroup_Name
     location: par_Location_01
     tags: var_Tags
   }
 }
 
-module mod_ResourceGroup_Fabrikam 'br/public:avm/res/resources/resource-group:0.4.0' = {
-  name: var_VirtualNetwork_Fabrikam_ResourceGroup_Name
+module mod_ResourceGroup_Spoke01 'br/public:avm/res/resources/resource-group:0.4.0' = {
+  name: var_VirtualNetwork_Spoke01_ResourceGroup_Name
   params: {
-    name: var_VirtualNetwork_Fabrikam_ResourceGroup_Name
+    name: var_VirtualNetwork_Spoke01_ResourceGroup_Name
     location: par_Location_02
     tags: var_Tags
   }
 }
 
-module mod_ResourceGroup_Tailwind 'br/public:avm/res/resources/resource-group:0.4.0' = {
-  name: var_VirtualNetwork_Tailwind_ResourceGroup_Name
+module mod_ResourceGroup_Spoke02 'br/public:avm/res/resources/resource-group:0.4.0' = {
+  name: var_VirtualNetwork_Spoke02_ResourceGroup_Name
   params: {
-    name: var_VirtualNetwork_Tailwind_ResourceGroup_Name
+    name: var_VirtualNetwork_Spoke02_ResourceGroup_Name
     location: par_Location_02
     tags: var_Tags
   }
 }
 
-module mod_VirtualNetwork_Contoso 'br/public:avm/res/network/virtual-network:0.5.1' = {
-  scope: resourceGroup(mod_ResourceGroup_Contoso.name)
-  name: var_VirtualNetwork_Contoso_Name
+module mod_VirtualNetwork_Hub01 'br/public:avm/res/network/virtual-network:0.5.1' = {
+  scope: resourceGroup(mod_ResourceGroup_Hub01.name)
+  name: var_VirtualNetwork_Hub01_Name
   params: {
-    name: var_VirtualNetwork_Contoso_Name
+    name: var_VirtualNetwork_Hub01_Name
     addressPrefixes: [
       '10.0.0.0/16'
     ]
@@ -91,11 +79,11 @@ module mod_VirtualNetwork_Contoso 'br/public:avm/res/network/virtual-network:0.5
   }
 }
 
-module mod_virtualNetwork_Fabrikam 'br/public:avm/res/network/virtual-network:0.5.1' = {
-  scope: resourceGroup(mod_ResourceGroup_Fabrikam.name)
-  name: var_VirtualNetwork_Fabrikam_Name
+module mod_virtualNetwork_Spoke01 'br/public:avm/res/network/virtual-network:0.5.1' = {
+  scope: resourceGroup(mod_ResourceGroup_Spoke01.name)
+  name: var_VirtualNetwork_Spoke01_Name
   params: {
-    name: var_VirtualNetwork_Fabrikam_Name
+    name: var_VirtualNetwork_Spoke01_Name
     addressPrefixes: [
       '10.1.0.0/16'
     ]
@@ -109,11 +97,11 @@ module mod_virtualNetwork_Fabrikam 'br/public:avm/res/network/virtual-network:0.
   }
 }
 
-module mod_VirtualNetwork_Tailwind 'br/public:avm/res/network/virtual-network:0.5.1' = {
-  scope: resourceGroup(mod_ResourceGroup_Tailwind.name)
-  name: var_VirtualNetwork_Tailwind_Name
+module mod_VirtualNetwork_Spoke02 'br/public:avm/res/network/virtual-network:0.5.1' = {
+  scope: resourceGroup(mod_ResourceGroup_Spoke02.name)
+  name: var_VirtualNetwork_Spoke02_Name
   params: {
-    name: var_VirtualNetwork_Tailwind_Name
+    name: var_VirtualNetwork_Spoke02_Name
     addressPrefixes: [
       '10.2.0.0/16'
     ]
@@ -129,10 +117,10 @@ module mod_VirtualNetwork_Tailwind 'br/public:avm/res/network/virtual-network:0.
 
 //////////////////////////////////  Network Manager  //////////////////////////////////
 module mod_VirtualNetwork_Manager_Contoso 'br/public:avm/res/network/network-manager:0.4.0' = {
-  scope: resourceGroup(mod_ResourceGroup_Contoso.name)
-  name: var_VirtualNetwork_Manager_Contoso_Name
+  scope: resourceGroup(mod_ResourceGroup_Hub01.name)
+  name: var_VirtualNetwork_Manager_Name
   params: {
-    name: var_VirtualNetwork_Manager_Contoso_Name
+    name: var_VirtualNetwork_Manager_Name
     networkManagerScopeAccesses: [
       'Connectivity'
       'SecurityAdmin'
@@ -147,7 +135,7 @@ module mod_VirtualNetwork_Manager_Contoso 'br/public:avm/res/network/network-man
 
 //////////////////////////////////  Virtual Machine  //////////////////////////////////
 module mod_VirtualMachine_Windows 'br/public:avm/res/compute/virtual-machine:0.9.0' = {
-  scope: resourceGroup(mod_ResourceGroup_Contoso.name)
+  scope: resourceGroup(mod_ResourceGroup_Hub01.name)
   name: var_VirtualMachine_Name
   params: {
     name: var_VirtualMachine_Name
@@ -164,7 +152,7 @@ module mod_VirtualMachine_Windows 'br/public:avm/res/compute/virtual-machine:0.9
         ipConfigurations: [
           {
             name: 'ipconfig01'
-            subnetResourceId: '${mod_VirtualNetwork_Contoso.outputs.subnetResourceIds}'
+            subnetResourceId: '${mod_VirtualNetwork_Hub01.outputs.subnetResourceIds}'
           }
         ]
         nicSuffix: '-nic-01'
