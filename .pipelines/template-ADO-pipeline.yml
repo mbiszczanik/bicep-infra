@@ -39,7 +39,7 @@ stages:
               subscriptionId: $(par_SubscriptionID)
               location: $(par_Location_Name)
               deploymentMode: Validation
-              csmFile: '.\core-main.bicep'
+              csmFile: './core-main.bicep'
               deploymentName: "$(par_Environment_Prefix)-$(par_Location_Prefix)-$(par_Base_Name)"
               overrideParameters: "-par_Environment_Prefix $(par_Environment_Prefix) -par_Base_Name $(par_Base_Name) -par_Location_Prefix $(par_Location_Prefix)"
 
@@ -75,6 +75,6 @@ stages:
               subscriptionId: $(par_SubscriptionID)
               location: $(par_Location_Name)
               deploymentMode: Incremental
-              csmFile: '.\core-main.bicep'
+              csmFile: './core-main.bicep'
               deploymentName: "$(par_Environment_Prefix)-$(par_Location_Prefix)-$(par_Base_Name)"
               overrideParameters: "-par_Environment_Prefix $(par_Environment_Prefix) -par_Base_Name $(par_Base_Name) -par_Location_Prefix $(par_Location_Prefix)"
