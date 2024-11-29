@@ -10,6 +10,8 @@ variables:
   par_Location_Prefix: "WEu"
   par_Service_Connection_Name: "TEST-Connection"
   par_SubscriptionID:
+  par_Template_File: "./core-main.bicep"
+  # par_Parameters_File: "./parameters/staging.bicepparam"
 
 parameters:
   - name: deployTest
@@ -22,7 +24,7 @@ stages:
       - job: Lint_Code
         steps:
           - script: |
-              az bicep build --file ./core-main.bicep
+              az bicep build --file $(par_Template_File)
             name: LintBicepCode
             displayName: Run Bicep linter
 
@@ -39,7 +41,7 @@ stages:
               subscriptionId: $(par_SubscriptionID)
               location: $(par_Location_Name)
               deploymentMode: Validation
-              csmFile: './core-main.bicep'
+              csmFile: $(par_Template_File)
               deploymentName: "$(par_Environment_Prefix)-$(par_Location_Prefix)-$(par_Base_Name)"
               overrideParameters: "-par_Environment_Prefix $(par_Environment_Prefix) -par_Base_Name $(par_Base_Name) -par_Location_Prefix $(par_Location_Prefix)"
 
@@ -60,7 +62,7 @@ stages:
               inlineScript: |
                 az deployment sub what-if \
                   --location westeurope \
-                  --template-file ./core-main.bicep
+                  --template-file $(par_Template_File)
 
   - stage: Deploy
     jobs:
@@ -75,6 +77,6 @@ stages:
               subscriptionId: $(par_SubscriptionID)
               location: $(par_Location_Name)
               deploymentMode: Incremental
-              csmFile: './core-main.bicep'
+              csmFile: $(par_Template_File)
               deploymentName: "$(par_Environment_Prefix)-$(par_Location_Prefix)-$(par_Base_Name)"
               overrideParameters: "-par_Environment_Prefix $(par_Environment_Prefix) -par_Base_Name $(par_Base_Name) -par_Location_Prefix $(par_Location_Prefix)"
