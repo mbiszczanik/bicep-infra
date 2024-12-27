@@ -1,0 +1,276 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkManagers_Hub01_WEU_AVNM01_name": {
+            "defaultValue": "Hub01-WEU-AVNM01",
+            "type": "String"
+        },
+        "virtualNetworks_Hub01_WEU_VNET01_name": {
+            "defaultValue": "Hub01-WEU-VNET01",
+            "type": "String"
+        },
+        "virtualNetworks_Spoke01_NEU_VNET01_externalid": {
+            "defaultValue": "/subscriptions/033dd423-eb29-4416-90cd-a47c6bebf420/resourceGroups/Spoke01-NEU-VNET-RG/providers/Microsoft.Network/virtualNetworks/Spoke01-NEU-VNET01",
+            "type": "String"
+        },
+        "virtualNetworks_Spoke02_NEU_VNET01_externalid": {
+            "defaultValue": "/subscriptions/033dd423-eb29-4416-90cd-a47c6bebf420/resourceGroups/Spoke02-NEU-VNET-RG/providers/Microsoft.Network/virtualNetworks/Spoke02-NEU-VNET01",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkManagers",
+            "apiVersion": "2024-01-01",
+            "name": "[parameters('networkManagers_Hub01_WEU_AVNM01_name')]",
+            "location": "West Europe",
+            "tags": {
+                "costCenter": "MSDN"
+            },
+            "properties": {
+                "networkManagerScopes": {
+                    "managementGroups": [],
+                    "subscriptions": [
+                        "/subscriptions/033dd423-eb29-4416-90cd-a47c6bebf420"
+                    ]
+                },
+                "networkManagerScopeAccesses": [
+                    "Connectivity"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2024-01-01",
+            "name": "[parameters('virtualNetworks_Hub01_WEU_VNET01_name')]",
+            "location": "westeurope",
+            "tags": {
+                "CostCenter": "MSDN"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "dhcpOptions": {
+                    "dnsServers": []
+                },
+                "subnets": [
+                    {
+                        "name": "ContosoSubnet",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), 'ContosoSubnet')]",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24",
+                            "serviceEndpoints": [],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                    {
+                        "name": "[concat('ANM_22740FFA83EB4B03043CC7E_', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '_Spoke01-NEU-VNET01_4564971656')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), concat('ANM_22740FFA83EB4B03043CC7E_', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '_Spoke01-NEU-VNET01_4564971656'))]",
+                        "properties": {
+                            "peeringState": "Connected",
+                            "peeringSyncLevel": "FullyInSync",
+                            "remoteVirtualNetwork": {
+                                "id": "[parameters('virtualNetworks_Spoke01_NEU_VNET01_externalid')]"
+                            },
+                            "allowVirtualNetworkAccess": true,
+                            "allowForwardedTraffic": true,
+                            "allowGatewayTransit": false,
+                            "useRemoteGateways": false,
+                            "doNotVerifyRemoteGateways": false,
+                            "peerCompleteVnets": true,
+                            "remoteAddressSpace": {
+                                "addressPrefixes": [
+                                    "10.1.0.0/16"
+                                ]
+                            },
+                            "remoteVirtualNetworkAddressSpace": {
+                                "addressPrefixes": [
+                                    "10.1.0.0/16"
+                                ]
+                            }
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+                    },
+                    {
+                        "name": "[concat('ANM_22740FFA83EB4B03043CC7E_', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '_Spoke02-NEU-VNET01_1213784172')]",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), concat('ANM_22740FFA83EB4B03043CC7E_', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '_Spoke02-NEU-VNET01_1213784172'))]",
+                        "properties": {
+                            "peeringState": "Connected",
+                            "peeringSyncLevel": "FullyInSync",
+                            "remoteVirtualNetwork": {
+                                "id": "[parameters('virtualNetworks_Spoke02_NEU_VNET01_externalid')]"
+                            },
+                            "allowVirtualNetworkAccess": true,
+                            "allowForwardedTraffic": true,
+                            "allowGatewayTransit": false,
+                            "useRemoteGateways": false,
+                            "doNotVerifyRemoteGateways": false,
+                            "peerCompleteVnets": true,
+                            "remoteAddressSpace": {
+                                "addressPrefixes": [
+                                    "10.2.0.0/16"
+                                ]
+                            },
+                            "remoteVirtualNetworkAddressSpace": {
+                                "addressPrefixes": [
+                                    "10.2.0.0/16"
+                                ]
+                            }
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+                    }
+                ],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkManagers/networkGroups",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('networkManagers_Hub01_WEU_AVNM01_name'), '/AVNM-NG')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkManagers', parameters('networkManagers_Hub01_WEU_AVNM01_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '/ContosoSubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Hub01_WEU_VNET01_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.0.0.0/24",
+                "serviceEndpoints": [],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '/ANM_22740FFA83EB4B03043CC7E_', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '_Spoke01-NEU-VNET01_4564971656')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Hub01_WEU_VNET01_name'))]"
+            ],
+            "properties": {
+                "peeringState": "Connected",
+                "peeringSyncLevel": "FullyInSync",
+                "remoteVirtualNetwork": {
+                    "id": "[parameters('virtualNetworks_Spoke01_NEU_VNET01_externalid')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": false,
+                "doNotVerifyRemoteGateways": false,
+                "peerCompleteVnets": true,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/16"
+                    ]
+                },
+                "remoteVirtualNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/16"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '/ANM_22740FFA83EB4B03043CC7E_', parameters('virtualNetworks_Hub01_WEU_VNET01_name'), '_Spoke02-NEU-VNET01_1213784172')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Hub01_WEU_VNET01_name'))]"
+            ],
+            "properties": {
+                "peeringState": "Connected",
+                "peeringSyncLevel": "FullyInSync",
+                "remoteVirtualNetwork": {
+                    "id": "[parameters('virtualNetworks_Spoke02_NEU_VNET01_externalid')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": false,
+                "doNotVerifyRemoteGateways": false,
+                "peerCompleteVnets": true,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/16"
+                    ]
+                },
+                "remoteVirtualNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/16"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkManagers/networkGroups/staticMembers",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('networkManagers_Hub01_WEU_AVNM01_name'), '/AVNM-NG/eszqzrhwhqstn')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkManagers/networkGroups', parameters('networkManagers_Hub01_WEU_AVNM01_name'), 'AVNM-NG')]",
+                "[resourceId('Microsoft.Network/networkManagers', parameters('networkManagers_Hub01_WEU_AVNM01_name'))]"
+            ],
+            "properties": {
+                "resourceId": "[parameters('virtualNetworks_Spoke01_NEU_VNET01_externalid')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkManagers/networkGroups/staticMembers",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('networkManagers_Hub01_WEU_AVNM01_name'), '/AVNM-NG/vktzqwnjkfict')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkManagers/networkGroups', parameters('networkManagers_Hub01_WEU_AVNM01_name'), 'AVNM-NG')]",
+                "[resourceId('Microsoft.Network/networkManagers', parameters('networkManagers_Hub01_WEU_AVNM01_name'))]"
+            ],
+            "properties": {
+                "resourceId": "[parameters('virtualNetworks_Spoke02_NEU_VNET01_externalid')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkManagers/connectivityConfigurations",
+            "apiVersion": "2024-01-01",
+            "name": "[concat(parameters('networkManagers_Hub01_WEU_AVNM01_name'), '/HUB_Spoke_Model')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkManagers', parameters('networkManagers_Hub01_WEU_AVNM01_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Hub01_WEU_VNET01_name'))]",
+                "[resourceId('Microsoft.Network/networkManagers/networkGroups', parameters('networkManagers_Hub01_WEU_AVNM01_name'), 'AVNM-NG')]"
+            ],
+            "properties": {
+                "connectivityTopology": "HubAndSpoke",
+                "hubs": [
+                    {
+                        "resourceType": "Microsoft.Network/virtualNetworks",
+                        "resourceId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_Hub01_WEU_VNET01_name'))]"
+                    }
+                ],
+                "appliesToGroups": [
+                    {
+                        "networkGroupId": "[resourceId('Microsoft.Network/networkManagers/networkGroups', parameters('networkManagers_Hub01_WEU_AVNM01_name'), 'AVNM-NG')]",
+                        "groupConnectivity": "DirectlyConnected",
+                        "useHubGateway": "False",
+                        "isGlobal": "False"
+                    }
+                ],
+                "deleteExistingPeering": "False",
+                "isGlobal": "False"
+            }
+        }
+    ]
+}

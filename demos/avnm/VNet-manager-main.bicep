@@ -16,14 +16,17 @@ param par_VirtualMachine_Admin_Password string
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
 var var_VirtualNetwork_Hub01_ResourceGroup_Name = 'Hub01-WEU-VNET-RG'
-var var_VirtualNetwork_Spoke01_ResourceGroup_Name = 'Spoke01-WEU-VNET-RG'
-var var_VirtualNetwork_Spoke02_ResourceGroup_Name = 'Spoke02-WEU-VNET-RG'
+var var_VirtualNetwork_Spoke01_ResourceGroup_Name = 'Spoke01-NEU-VNET-RG'
+var var_VirtualNetwork_Spoke02_ResourceGroup_Name = 'Spoke02-NEU-VNET-RG'
 
 var var_VirtualNetwork_Hub01_Name = 'Hub01-WEU-VNET01'
-var var_VirtualNetwork_Spoke01_Name = 'Spoke01-WEU-VNET01'
-var var_VirtualNetwork_Spoke02_Name = 'Spoke02-WEU-VNET01'
+var var_VirtualNetwork_Spoke01_Name = 'Spoke01-NEU-VNET01'
+var var_VirtualNetwork_Spoke02_Name = 'Spoke02-NEU-VNET01'
 var var_VirtualNetwork_Manager_Name = 'Hub01-WEU-AVNM01'
-var var_VirtualMachine_Name = 'TestVM01'
+var var_VirtualMachine_Name01 = 'TestVM01'
+var var_VirtualMachine_Name02 = 'TestVM02'
+
+
 
 var var_Tags = {
   Environment: 'Training'
@@ -134,12 +137,12 @@ module mod_VirtualNetwork_Manager_Contoso 'br/public:avm/res/network/network-man
 }
 
 //////////////////////////////////  Virtual Machine  //////////////////////////////////
-module mod_VirtualMachine_Windows 'br/public:avm/res/compute/virtual-machine:0.9.0' = {
+module mod_VirtualMachine_Windows01 'br/public:avm/res/compute/virtual-machine:0.9.0' = {
   scope: resourceGroup(mod_ResourceGroup_Hub01.name)
-  name: var_VirtualMachine_Name
+  name: var_VirtualMachine_Name01
   params: {
-    name: var_VirtualMachine_Name
-    adminUsername: '${var_VirtualMachine_Name}Admin'
+    name: var_VirtualMachine_Name01
+    adminUsername: '${var_VirtualMachine_Name01}Admin'
     adminPassword: par_VirtualMachine_Admin_Password
     imageReference: {
       offer: 'WindowsServer'
@@ -153,6 +156,45 @@ module mod_VirtualMachine_Windows 'br/public:avm/res/compute/virtual-machine:0.9
           {
             name: 'ipconfig01'
             subnetResourceId: '${mod_VirtualNetwork_Hub01.outputs.subnetResourceIds}'
+          }
+        ]
+        nicSuffix: '-nic-01'
+        enableAcceleratedNetworking: false
+      }
+    ]
+    osDisk: {
+      caching: 'ReadWrite'
+      diskSizeGB: 128
+      managedDisk: {
+        storageAccountType: 'StandardSSD_LRS'
+      }
+    }
+    osType: 'Windows'
+    vmSize: 'Standard_B2ms'
+    zone: 0
+    encryptionAtHost: false
+  }
+}
+
+module mod_VirtualMachine_Windows02 'br/public:avm/res/compute/virtual-machine:0.9.0' = {
+  scope: resourceGroup(mod_ResourceGroup_Spoke02.name)
+  name: var_VirtualMachine_Name02
+  params: {
+    name: var_VirtualMachine_Name02
+    adminUsername: '${var_VirtualMachine_Name02}Admin'
+    adminPassword: par_VirtualMachine_Admin_Password
+    imageReference: {
+      offer: 'WindowsServer'
+      publisher: 'MicrosoftWindowsServer'
+      sku: '2022-datacenter-azure-edition'
+      version: 'latest'
+    }
+    nicConfigurations: [
+      {
+        ipConfigurations: [
+          {
+            name: 'ipconfig01'
+            subnetResourceId: '${mod_VirtualNetwork_Spoke02.outputs.subnetResourceIds}'
           }
         ]
         nicSuffix: '-nic-01'
