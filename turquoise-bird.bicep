@@ -40,8 +40,7 @@ param networkSecurityGroup_Rules array = []
 
 var tags = {
   Environment: 'Training'
-  CostCenter: '00001'
-  MSDN: 'MSDN'
+  CostCenter: 'MSDN'
 }
 
 var virtualNetwork_RGName = 'T-TB-VNET-RG01'
