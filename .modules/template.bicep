@@ -1,19 +1,32 @@
 /*
 SUMMARY: 
 DESCRIPTION: 
-AUTHOR/S: Marcin Biszczanik
+AUTHOR/S:
 VERSION:
 URI: 
+
+@@@---------- MANUAL TESTING & DEPLOYMENT ----------@@@
+Connect-AzAccount -TenantId <Azure Tenant ID>
+
+Select-AzSubscription <Azure Subscription>
+
+###---------- Development ----------###
+New-AzSubscriptionDeployment `
+-Name "XYZ" `
+-Location "North Europe" `
+-TemplateFile .\main.bicep `
+-TemplateParameterFile .\parameters\development.bicepparam `
+-Verbose `
+-Whatif
+
 */
 
-//////////////////////////////////  PARAMETERS //////////////////////////////////
+/////---------- TARGET SCOPE ----------/////
 
+/////---------- PARAMETERS ----------/////
 
-//////////////////////////////////  VARIABLES //////////////////////////////////
+/////---------- VARIABLES ----------/////
 
+/////---------- RESOURCES ----------/////
 
-////////////////////////////////// RESOURCES //////////////////////////////////
-
-
-//////////////////////////////////  OUTPUT  //////////////////////////////////
-
+/////---------- OUTPUTS ----------/////

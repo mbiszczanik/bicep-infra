@@ -32,9 +32,16 @@ var PIPName2 = 'testvm2-pip'
 var subnetName = 'DatabaseSubnet'
 var subnetRef = resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
 
+var tags = {
+  Environment: 'Training'
+  CostCenter: '00001'
+  MSDN: 'MSDN'
+}
+
 resource vm1 'Microsoft.Compute/virtualMachines@2023-09-01' = {
   name: vmName1
   location: resourceGroup().location
+  tags: tags
   properties: {
     osProfile: {
       computerName: vmName1
@@ -75,6 +82,7 @@ resource vm1 'Microsoft.Compute/virtualMachines@2023-09-01' = {
 resource nic1 'Microsoft.Network/networkInterfaces@2023-09-01' = {
   name: nicName1
   location: resourceGroup().location
+  tags: tags
   properties: {
     ipConfigurations: [
       {
@@ -99,6 +107,7 @@ resource nic1 'Microsoft.Network/networkInterfaces@2023-09-01' = {
 resource nsg1 'Microsoft.Network/networkSecurityGroups@2023-09-01' = {
   name: nsgName1
   location: resourceGroup().location
+  tags: tags
   properties: {
     securityRules: [
       {
@@ -121,6 +130,7 @@ resource nsg1 'Microsoft.Network/networkSecurityGroups@2023-09-01' = {
 resource vm2 'Microsoft.Compute/virtualMachines@2023-09-01' = {
   name: vmName2
   location: resourceGroup().location
+  tags: tags
   properties: {
     osProfile: {
       computerName: vmName2
@@ -161,6 +171,7 @@ resource vm2 'Microsoft.Compute/virtualMachines@2023-09-01' = {
 resource nic2 'Microsoft.Network/networkInterfaces@2023-09-01' = {
   name: nicName2
   location: resourceGroup().location
+  tags: tags
   properties: {
     ipConfigurations: [
       {
@@ -185,6 +196,7 @@ resource nic2 'Microsoft.Network/networkInterfaces@2023-09-01' = {
 resource nsg2 'Microsoft.Network/networkSecurityGroups@2023-09-01' = {
   name: nsgName2
   location: resourceGroup().location
+  tags: tags
   properties: {
     securityRules: [
       {
@@ -207,6 +219,7 @@ resource nsg2 'Microsoft.Network/networkSecurityGroups@2023-09-01' = {
 resource PIP1 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: PIPName1
   location: resourceGroup().location
+  tags: tags
   sku: {
     name: 'Basic'
     tier: 'Regional'
@@ -220,6 +233,7 @@ resource PIP1 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
 resource PIP2 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: PIPName2
   location: resourceGroup().location
+  tags: tags
   sku: {
     name: 'Basic'
     tier: 'Regional'
