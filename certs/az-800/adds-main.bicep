@@ -13,6 +13,8 @@ Select-AzSubscription <Azure Subscription>
 
 ###---------- Development ----------###
 
+New-AzResourceGroup -Name az800-rg01 -Location swedencentral
+
 New-AzResourceGroupDeployment `
 -Name "ADDS" `
 -ResourceGroupName "az800-rg01" `
@@ -32,18 +34,20 @@ targetScope = 'resourceGroup'
 /*******************
 *    Parameters    *
 *******************/
-param par_Location string = 'northeurope'
+param par_Location string = 'swedencentral'
 
 @secure()
 param par_AdminPassword string
 
-/*******************
-*    Variables     *
-*******************/
-var var_Tags = {
+param par_Tags object = {
   Environment: 'Training'
   CostCenter: 'MSDN'
 }
+
+/*******************
+*    Variables     *
+*******************/
+
 
 var var_VirtualNetwork_Name = 'Az800-NEU-VNET01'
 var var_PublicIPAdress_Name01 = 'Az800-NEU-PIP01'
@@ -71,7 +75,7 @@ module mod_VirtualNetwork 'br/public:avm/res/network/virtual-network:0.5.4' = {
     name: var_VirtualNetwork_Name
     // Non-required parameters
     location: par_Location
-    tags: var_Tags
+    tags: par_Tags
   }
 }
 
@@ -84,11 +88,6 @@ module mod_PublicIpAddress01 'br/public:avm/res/network/public-ip-address:0.8.0'
     location: par_Location
     publicIPAllocationMethod: 'Static'
     skuName: 'Standard'
-    zones: [
-      1
-      2
-      3
-    ]
   }
 }
 
@@ -149,7 +148,7 @@ module mod_VirtualMachine_Windows01 'br/public:avm/res/compute/virtual-machine:0
     vmSize: 'Standard_B2ms'
     zone: 1
     encryptionAtHost: false
-    tags: var_Tags
+    tags: par_Tags
   }
   dependsOn: [
   ]
@@ -192,7 +191,7 @@ module mod_VirtualMachine_Windows02 'br/public:avm/res/compute/virtual-machine:0
     vmSize: 'Standard_B2ms'
     zone: 1
     encryptionAtHost: false
-    tags: var_Tags
+    tags: par_Tags
   }
   dependsOn: [
   ]
