@@ -1,61 +1,126 @@
 /*
-SUMMARY: Windows Server Virtual
-DESCRIPTION: 
+SUMMARY: Windows Server Virtual Machine deployment
+DESCRIPTION: Deploys a Windows Server VM with associated networking and security resources
 AUTHOR/S: Marcin Biszczanik
-VERSION:
-URI: 
+VERSION: 1.0
 */
+
+//////////////////////////////////  TARGET SCOPE //////////////////////////////////
+
+targetScope = 'resourceGroup'
 
 //////////////////////////////////  PARAMETERS //////////////////////////////////
 
-param virtualMachine_Name string
-param virtualMachine_Location string = resourceGroup().location
-param tags object
-param virtualMachine_Size string = 'Standard_B2ms'
-param virtualMachine_AdminUsername string = '${virtualMachine_Name}Admin'
+@description('Base name for all resources')
+param parBaseName string
+
+@description('Environment prefix, e.g. DEV, TST, PRD')
+param parEnvironmentPrefix string = 'T'
+
+@description('Location prefix, e.g. WEu')
+param parLocationPrefix string = 'WEu'
+
+@description('Azure region for deployment')
+param parLocation string = resourceGroup().location
+
+@description('Instance number for resource uniqueness')
+param parInstanceNumber string = '01'
+
+@description('Tags to apply to all resources')
+param parTags object = {}
+
+@description('VM size')
+param parVmSize string = 'Standard_B2ms'
+
+@description('VM admin username')
+param parAdminUsername string
+
 @secure()
-param virtualMachine_AdminPassword string
-param virtualMachine_OSVersion string = '2019-Datacenter'
-param virtualMachine_DiskType string = 'StandardSSD_LRS'
+@description('VM admin password')
+param parAdminPassword string
 
-param networkSecurityGroup_name string = '${virtualMachine_Name}-NSG'
-param networkSecurityGroup_Rules array
+@description('Windows Server version SKU')
+@allowed(['2016-Datacenter','2019-Datacenter','2022-Datacenter'])
+param parOsVersion string = '2019-Datacenter'
 
-param networkInterface_Name string = '${virtualMachine_Name}-NIC'
-param networkInterface_NetworkSecurityGroupId string
-param networkInterface_PrivateIpAddress string
-param networkInterface_SubnetId string
-param publicIpAddress_Name string = '${virtualMachine_Name}-PIP'
+@description('OS disk type')
+@allowed(['Standard_LRS','StandardSSD_LRS','Premium_LRS'])
+param parOsDiskType string = 'StandardSSD_LRS'
+
+@description('Subnet resource ID for the VM NIC')
+param parSubnetId string
+
+@description('Private IP address for the VM NIC (optional)')
+param parPrivateIpAddress string = ''
+
+@description('Array of NSG rules')
+param parNsgRules array = []
 
 //////////////////////////////////  VARIABLES //////////////////////////////////
 
+var varVmName = '${parEnvironmentPrefix}-${parBaseName}-${parLocationPrefix}-VM${parInstanceNumber}'
+var varNsgName = '${parEnvironmentPrefix}-${parBaseName}-${parLocationPrefix}-NSG${parInstanceNumber}'
+var varNicName = '${parEnvironmentPrefix}-${parBaseName}-${parLocationPrefix}-NIC${parInstanceNumber}'
+var varPipName = '${parEnvironmentPrefix}-${parBaseName}-${parLocationPrefix}-PIP${parInstanceNumber}'
+var varOsDiskName = '${varVmName}-OSDisk'
+
 ////////////////////////////////// RESOURCES //////////////////////////////////
 
-resource virtualMachine 'Microsoft.Compute/virtualMachines@2024-03-01' = {
-  name: virtualMachine_Name
-  location: virtualMachine_Location
-  tags: tags
+module modNsg '../network/networkSecurityGroup.bicep' = {
+  name: varNsgName
+  params: {
+    tags: parTags
+    networkSecurityGroup_Name: varNsgName
+    networkSecurityGroup_Location: parLocation
+    networkSecurityGroup_Rules: parNsgRules
+  }
+}
+
+module modNic '../network/networkInterface.bicep' = {
+  name: varNicName
+  params: {
+    tags: parTags
+    networkInterface_Name: varNicName
+    networkInterface_NetworkSecurityGroupId: modNsg.outputs.networkSecurityGroup_Id
+    networkInterface_PrivateIpAddress: parPrivateIpAddress
+    networkInterface_SubnetId: parSubnetId
+    networkInterface_Location: parLocation
+  }
+}
+
+module modPip '../network/publicIPaddress.bicep' = {
+  name: varPipName
+  params: {
+    tags: parTags
+    publicIpAddress_Name: varPipName
+  }
+}
+
+resource resVm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
+  name: varVmName
+  location: parLocation
+  tags: parTags
   properties: {
     hardwareProfile: {
-      vmSize: virtualMachine_Size
+      vmSize: parVmSize
     }
     osProfile: {
-      computerName: virtualMachine_Name
-      adminUsername: virtualMachine_AdminUsername
-      adminPassword: virtualMachine_AdminPassword
+      computerName: varVmName
+      adminUsername: parAdminUsername
+      adminPassword: parAdminPassword
     }
     storageProfile: {
       imageReference: {
         publisher: 'MicrosoftWindowsServer'
         offer: 'WindowsServer'
-        sku: virtualMachine_OSVersion
+        sku: parOsVersion
         version: 'latest'
       }
       osDisk: {
-        name: '${virtualMachine_Name}-OSDisk'
+        name: varOsDiskName
         createOption: 'FromImage'
         managedDisk: {
-          storageAccountType: virtualMachine_DiskType
+          storageAccountType: parOsDiskType
         }
       }
       dataDisks: [
@@ -69,43 +134,13 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2024-03-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: networkInterface.outputs.networkInterface_Id
+          id: modNic.outputs.networkInterface_Id
         }
       ]
     }
   }
 }
 
-module networkSecurityGroup '../network/networkSecurityGroup.bicep' = {
-  name: networkSecurityGroup_name
-  params: {
-    tags: tags
-    networkSecurityGroup_Name: networkSecurityGroup_name
-    networkSecurityGroup_Location: virtualMachine_Location
-    networkSecurityGroup_Rules: networkSecurityGroup_Rules
-  }
-}
-
-module networkInterface '../network/networkInterface.bicep' = {
-  name: networkInterface_Name
-  params: {
-    tags: tags
-    networkInterface_Name: networkInterface_Name
-    networkInterface_NetworkSecurityGroupId: networkInterface_NetworkSecurityGroupId
-    networkInterface_PrivateIpAddress: networkInterface_PrivateIpAddress
-    networkInterface_SubnetId: networkInterface_SubnetId
-    
-  }
-}
-
-module publicIpAddress '../network/publicIPaddress.bicep' = {
-  name: publicIpAddress_Name
-  params: {
-    tags: tags
-    publicIpAddress_Name: publicIpAddress_Name
-  }
-}
-
 //////////////////////////////////  OUTPUT  //////////////////////////////////
-output virtualMachine_Name string = virtualMachine.name
-output virtualMachine_Id string = virtualMachine.id
+output virtualMachine_Name string = resVm.name
+output virtualMachine_Id string = resVm.id
