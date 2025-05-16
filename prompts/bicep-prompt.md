@@ -44,10 +44,10 @@ param parInstanceNumber string = '01'
 *******************/
 
 /** Resource Groups **/
-var varVirtualNetworkResourceGroupName = '${par_Environment_Prefix}-${par_Base_Name}-${par_Location_Prefix}-VNet-RG${par_Instance_Number}'
-var varNetworkSecurityGroupResourceGroupName = '${par_Environment_Prefix}-${par_Base_Name}-${par_Location_Prefix}-NSG-RG${par_Instance_Number}'
-var varNetworkWatcherResourceGroupName = '${par_Environment_Prefix}-${par_Base_Name}-${par_Location_Prefix}-NetworkWatcher-RG${par_Instance_Number}'
-var varKeyVaultResourceGroupName = '${par_Environment_Prefix}-${par_Base_Name}-${par_Location_Prefix}-KV-RG01'
+var varVirtualNetworkResourceGroupName = '${parEnvironmentPrefix}-${parBaseName}-${parLocationPrefix}-VNet-RG${parInstanceNumber}'
+var varNetworkSecurityGroupResourceGroupName = '${parEnvironmentPrefix}-${parBaseName}-${parLocationPrefix}-NSG-RG${parInstanceNumber}'
+var varNetworkWatcherResourceGroupName = '${parEnvironmentPrefix}-${parBaseName}-${parLocationPrefix}-NetworkWatcher-RG${parInstanceNumber}'
+var varKeyVaultResourceGroupName = '${parEnvironmentPrefix}-${parBaseName}-${parLocationPrefix}-KV-RG01'
 ```
 
 5. Resource Deployments Section (existing)
@@ -59,7 +59,7 @@ var varKeyVaultResourceGroupName = '${par_Environment_Prefix}-${par_Base_Name}-$
 /** Existing resources **/
 resource resVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' existing = {
   name: parVirtualNetwork
-  scope: resourceGroup(par_Subscription, parVirtualNetworkResourceGroup)
+  scope: resourceGroup(parSubscription, parVirtualNetworkResourceGroup)
 }
 ```
 
@@ -119,10 +119,10 @@ output devCenterProjectId string = resDevCenterProject.id
 ## 2. Naming Conventions
 
 ### Element Prefixes
-- Parameters: `par` (e.g., par_Location)
-- Variables: `var` (e.g., var_ResourceGroupName)
-- Resources: `res` (e.g., res_StorageAccount)
-- Modules: `mod` (e.g., mod_KeyVault)
+- Parameters: `par` (e.g., parLocation)
+- Variables: `var` (e.g., varResourceGroupName)
+- Resources: `res` (e.g., resStorageAccount)
+- Modules: `mod` (e.g., modKeyVault)
 - Outputs: No prefix required
 
 ### Standard Parameter Names
