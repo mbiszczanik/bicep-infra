@@ -1,28 +1,46 @@
 /*
 SUMMARY: Resource Group resource
-DESCRIPTION: 
+DESCRIPTION: Deploys an Azure Resource Group with tags.
 AUTHOR/S: Marcin Biszczanik
-VERSION: 1.0
+VERSION: 1.1
 */
 
+/*******************
+*   Target Scope   *
+*******************/
 targetScope = 'subscription'
 
-//////////////////////////////////  PARAMETERS //////////////////////////////////
-param resourceGroup_Name string
-param resourceGroup_Location string = deployment().location
-param tags object
+/*******************
+*    Parameters    *
+*******************/
+@description('The name of the Resource Group.')
+param parResourceGroupName string
 
-//////////////////////////////////  RESOURCES //////////////////////////////////
-resource resourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-  name: resourceGroup_Name
-  location: resourceGroup_Location
-  tags: tags
+@description('The Azure region for the Resource Group.')
+param parLocation string = deployment().location
+
+@description('Tags to be applied to the Resource Group.')
+param parTags object = {}
+
+/*******************
+*    Variables     *
+*******************/
+var varResourceGroupName = parResourceGroupName
+
+/*******************
+*    Resources     *
+*******************/
+resource resResourceGroup 'Microsoft.Resources/resourceGroups@2023-07-01' = {
+  name: varResourceGroupName
+  location: parLocation
+  tags: parTags
 }
 
-
-//////////////////////////////////  OUTPUT  //////////////////////////////////
-output resourceGroup_Name string = resourceGroup.name
-output resourceGroup_Id string = resourceGroup.id
+/******************
+*     Outputs     *
+******************/
+output resourceGroupName string = resResourceGroup.name
+output resourceGroupId string = resResourceGroup.id
 
 
 
