@@ -1,15 +1,30 @@
 /*
 SUMMARY: Linux Virtual Machine resource
-DESCRIPTION: 
+DESCRIPTION: Deploys a simple Linux VM with optional Azure AD login and configurable disk, image, and network settings.
 AUTHOR/S: Marcin Biszczanik
-VERSION: 1.0
+VERSION: 1.2
 */
 
-//////////////////////////////////  PARAMETERS //////////////////////////////////
-param virtualMachine_Name string
-param virtualMachine_Location string = resourceGroup().location
-param virtualMachine_Tags object
-param virtualMachine_Size string
+/*******************
+*   Target Scope   *
+*******************/
+targetScope = 'resourceGroup'
+
+/*******************
+*    Parameters    *
+*******************/
+
+@description('The name of the Virtual Machine.')
+param parVmName string
+
+@description('The Azure region for the Virtual Machine.')
+param parLocation string = resourceGroup().location
+
+@description('Tags to be applied to the Virtual Machine.')
+param parTags object = {}
+
+@description('The size of the Virtual Machine.')
+param parVmSize string
 
 @allowed([
   'Premium_LRS'
@@ -18,23 +33,12 @@ param virtualMachine_Size string
   'StandardSSD_ZRS'
   'Standard_LRS'
   'UltraSSD_LRS'
-  ])
-@description(' ')
-param virtualMachine_OsDiskSkuName string = 'Premium_LRS'
+])
+@description('The SKU for the OS disk. Default is Premium_LRS.')
+param parOsDiskSkuName string = 'Premium_LRS'
 
-param virtualMachine_ImageReference object = {
-  'Ubuntu-1804': {
-    publisher: 'Canonical'
-    offer: 'UbuntuServer'
-    sku: '18_04-lts-gen2'
-    version: 'latest'
-  }
-  'Ubuntu-2004': {
-    publisher: 'Canonical'
-    offer: '0001-com-ubuntu-server-focal'
-    sku: '20_04-lts-gen2'
-    version: 'latest'
-  }
+@description('The image reference for the Virtual Machine.')
+param parImageReference object = {
   'Ubuntu-2204': {
     publisher: 'Canonical'
     offer: '0001-com-ubuntu-server-jammy'
@@ -43,110 +47,121 @@ param virtualMachine_ImageReference object = {
   }
 }
 
-param virtualMachine_AdminName string
+@description('The admin username for the Virtual Machine.')
+param parAdminName string
+
 @secure()
-param virtualMachine_AdminPassword string
+@description('The admin password for the Virtual Machine.')
+param parAdminPassword string
 
 @allowed([
   'ImageDefault'
   'AutomaticByPlatform'
 ])
-@description('')
-param virtualMachine_PatchMode string = 'ImageDefault'
+@description('The patch mode for the Linux VM. Default is ImageDefault.')
+param parPatchMode string = 'ImageDefault'
 
+@description('Optional. The private IP address for the VM network interface.')
+param parPrivateIpAddress string = ''
 
-param virtualMachine_PrivateIPAddress string = ''
-param virtualMachine_SubnetId string
+@description('The subnet resource ID for the VM network interface.')
+param parSubnetId string
 
-@description('Optional. Integration witch Azure AD RBAC login for VMs')
-param virtualMachine_AADLoginEnable bool = false
+@description('Enable Azure AD login for the VM.')
+param parAadLoginEnable bool = false
 
-param virtualMachine_AADLoginExtensionName string = 'AADSSHLoginForLinux'
+@description('The name of the Azure AD login extension.')
+param parAadLoginExtensionName string = 'AADSSHLoginForLinux'
 
-////////////////////////////////// RESOURCES //////////////////////////////////
-resource virtualMachine 'Microsoft.Compute/virtualMachines@2023-03-01' = {
-  name: virtualMachine_Name
-  location: virtualMachine_Location
-  tags: virtualMachine_Tags
+/*******************
+*    Variables     *
+*******************/
+
+var varNicName = '${parVmName}-NIC'
+var varNsgName = '${parVmName}-NSG'
+var varOsDiskName = '${parVmName}-OSDisk'
+
+/*******************
+*    Resources     *
+*******************/
+
+resource resVmNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
+  name: varNsgName
+  location: parLocation
+  tags: parTags
+}
+
+module modVmNic '../network/networkInterface.bicep' = {
+  name: varNicName
+  params: {
+    networkInterface_Name: varNicName
+    networkInterface_NetworkSecurityGroupId: resVmNsg.id
+    networkInterface_PrivateIpAddress: parPrivateIpAddress
+    networkInterface_SubnetId: parSubnetId
+    tags: parTags
+    networkInterface_Location: parLocation
+  }
+}
+
+resource resVm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
+  name: parVmName
+  location: parLocation
+  tags: parTags
   properties: {
     hardwareProfile: {
-      vmSize: virtualMachine_Size
+      vmSize: parVmSize
     }
-    storageProfile:{
-      osDisk:{
-        name: '${virtualMachine_Name}-OSDisk'
+    storageProfile: {
+      osDisk: {
+        name: varOsDiskName
         createOption: 'FromImage'
-        osType:'Linux'
-        caching:'ReadWrite'
-        writeAcceleratorEnabled:false
-        managedDisk:{
-          storageAccountType: virtualMachine_OsDiskSkuName
+        osType: 'Linux'
+        caching: 'ReadWrite'
+        writeAcceleratorEnabled: false
+        managedDisk: {
+          storageAccountType: parOsDiskSkuName
         }
       }
-      imageReference: virtualMachine_ImageReference
+      imageReference: parImageReference
     }
     networkProfile: {
       networkInterfaces: [
         {
-          id: virtualMachine_NIC.outputs.networkInterface_Id
+          id: modVmNic.outputs.networkInterface_Id
         }
       ]
     }
     osProfile: {
-      computerName: virtualMachine_Name
-      adminUsername: virtualMachine_AdminName
-      adminPassword: virtualMachine_AdminPassword
+      computerName: parVmName
+      adminUsername: parAdminName
+      adminPassword: parAdminPassword
       linuxConfiguration: {
         patchSettings: {
-          patchMode: virtualMachine_PatchMode
+          patchMode: parPatchMode
         }
-        
       }
     }
   }
-  dependsOn: [
-    virtualMachine_NIC
-  ]
 }
 
-resource virtualMachine_Extension 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = if (virtualMachine_AADLoginEnable == true) {
-  parent: virtualMachine
-  name: virtualMachine_AADLoginExtensionName
-  location: virtualMachine_Location
+resource resVmAadExtension 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' = if (parAadLoginEnable) {
+  parent: resVm
+  name: parAadLoginExtensionName
+  location: parLocation
   properties: {
     publisher: 'Microsoft.Azure.ActiveDirectory'
-    type: virtualMachine_AADLoginExtensionName
+    type: parAadLoginExtensionName
     typeHandlerVersion: '1.0'
     autoUpgradeMinorVersion: true
   }
 }
 
-////////////////////////////////// MODULES //////////////////////////////////
+/*******************
+*     Outputs      *
+*******************/
 
-module virtualMachine_NIC '../network/networkInterface.bicep' = {
-  name: '${virtualMachine_Name}-NIC'
-  params: {
-    networkInterface_Name: '${virtualMachine_Name}-NIC'
-    networkInterface_NetworkSecurityGroupId: virtualMachine_NSG.outputs.networkSecurityGroup_Id
-    networkInterface_PrivateIpAddress: virtualMachine_PrivateIPAddress
-    networkInterface_SubnetId: virtualMachine_SubnetId 
-    tags: virtualMachine_Tags
-    networkInterface_Location: virtualMachine_Location
-  }
-  dependsOn:[
-    virtualMachine_NSG
-  ]
-}
-
-module virtualMachine_NSG '../network/networkSecurityGroup.bicep' = {
-  name: '${virtualMachine_Name}-NSG'
-  params: {
-    networkSecurityGroup_Name: '${virtualMachine_Name}-NSG'
-    tags: virtualMachine_Tags
-    networkSecurityGroup_Location: virtualMachine_Location
-  }
-}
-
-//////////////////////////////////  OUTPUT  //////////////////////////////////
+output vmId string = resVm.id
+output nicId string = modVmNic.outputs.networkInterface_Id
+output nsgId string = resVmNsg.id
 
 
