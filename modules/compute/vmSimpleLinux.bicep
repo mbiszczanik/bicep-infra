@@ -2,7 +2,7 @@
 SUMMARY: Linux Virtual Machine resource
 DESCRIPTION: Deploys a simple Linux VM with optional Azure AD login and configurable disk, image, and network settings.
 AUTHOR/S: Marcin Biszczanik
-VERSION: 1.1
+VERSION: 1.2
 */
 
 /*******************
@@ -85,7 +85,7 @@ var varOsDiskName = '${parVmName}-OSDisk'
 *    Resources     *
 *******************/
 
-resource resVmNsg 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
+resource resVmNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
   name: varNsgName
   location: parLocation
   tags: parTags
@@ -103,7 +103,7 @@ module modVmNic '../network/networkInterface.bicep' = {
   }
 }
 
-resource resVm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
+resource resVm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
   name: parVmName
   location: parLocation
   tags: parTags
@@ -144,7 +144,7 @@ resource resVm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
   }
 }
 
-resource resVmAadExtension 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = if (parAadLoginEnable) {
+resource resVmAadExtension 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' = if (parAadLoginEnable) {
   parent: resVm
   name: parAadLoginExtensionName
   location: parLocation
