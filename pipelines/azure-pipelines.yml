@@ -1,0 +1,70 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+parameters:
+  - name: azureServiceConnection
+    type: string
+    default: 'your-connection-name'
+
+variables:
+  vmImageName: 'ubuntu-latest'
+  resourceGroupName: 'exampleRG'
+  location: 'westeurope'
+  bicepFile: './Bicep/main.bicep'
+  bicepParamFile: './Bicep/main.bicepparam'
+
+stages:
+  - stage: Validate
+    jobs:
+      - job: ValidateBicep
+        steps:
+          - task: AzureCLI@2
+            displayName: 'Validate Bicep'
+            inputs:
+              azureSubscription: '${{ parameters.azureServiceConnection }}'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az bicep build --file $(bicepFile)
+                az deployment sub validate \
+                  --location $(location) \
+                  --template-file $(bicepFile) \
+                  --parameters $(bicepParamFile)
+
+  - stage: Preview
+    dependsOn: Validate
+    jobs:
+      - job: WhatIfDeployment
+        steps:
+          - task: AzureCLI@2
+            displayName: 'What-If Deployment'
+            inputs:
+              azureSubscription: '${{ parameters.azureServiceConnection }}'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az deployment sub what-if \
+                  --location $(location) \
+                  --template-file $(bicepFile) \
+                  --parameters $(bicepParamFile)
+
+  - stage: Deploy
+    dependsOn: Preview
+    jobs:
+      - job: DeployBicep
+        steps:
+          - task: AzureCLI@2
+            displayName: 'Deploy Bicep'
+            inputs:
+              azureSubscription: '${{ parameters.azureServiceConnection }}'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az deployment sub create \
+                  --location $(location) \
+                  --template-file $(bicepFile) \
+                  --parameters $(bicepParamFile) \
+                  --name "Deployment-$(Build.BuildNumber)"
