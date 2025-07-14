@@ -38,13 +38,13 @@ az group create --name 'vmconnlab-rg' --location 'swedencentral'
 #### PowerShell
 
 ```powershell
-New-AzResourceGroupDeployment -ResourceGroupName 'vmconnlab-rg' -TemplateFile '.\demos\network-troubleshooting\vm-connectivity-lab.bicep' -adminUsername 'azureadmin'
+New-AzResourceGroupDeployment -ResourceGroupName 'vmconnlab-rg' -TemplateFile '.\demos\network-monitoring-troubleshooting\vm-connectivity-lab\vm-connectivity-lab.bicep' -adminUsername 'azureadmin'
 ```
 
 #### Azure CLI
 
 ```bash
-az deployment group create --resource-group 'vmconnlab-rg' --template-file '.\demos\network-troubleshooting\vm-connectivity-lab.bicep' --parameters adminUsername='azureadmin'
+az deployment group create --resource-group 'vmconnlab-rg' --template-file '.\demos\network-monitoring-troubleshooting\vm-connectivity-lab\vm-connectivity-lab.bicep' --parameters adminUsername='azureadmin'
 ```
 
 #### Azure Cloud Shell (if you do not have installed any tools)
@@ -88,7 +88,7 @@ ping <vm2-private-ip>
    - **Local IP:** Use the private IP of VM1 (auto-populated).
    - **Local Port:** `56789` (for TCP).
    - **Remote IP:** Enter VM2's private IP.
-   - **Remote Port:** `22` (for SSH) or `80` (for HTTP) or leave blank for ICMP.
+   - **Remote Port:** `22` (for SSH) or `80` (for HTTP).
 
 4. Click **Check**.
 
