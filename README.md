@@ -13,9 +13,9 @@ Welcome! This repository is a comprehensive test and demonstration environment f
 
 ## 📂 Repository Structure
 - `modules/` — Reusable Bicep modules (compute, network, monitor, etc.)
-- `demos/` — Hands-on demo environments and labs
-- `certs/` — Certification-aligned scenarios (AZ-700, AZ-800)
-- `pipelines/` — CI/CD pipeline templates
+- `scenarios/` — Hands-on demo environments and labs
+- `certifications/` — Certification-aligned scenarios (AZ-700, AZ-800)
+- `.azure-pipelines/` — Azure CI/CD pipeline templates
 - `core-main.bicep` — Example main deployment
 
 ## 🏁 Quick Start
